@@ -59,15 +59,10 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
-
       - name: Run Uncrustify
         shell: bash
         run: |
+          source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
           ament_uncrustify -c ament_code_style.cfg
 
@@ -103,14 +98,9 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Run xmllint
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          ament_xmllint --exclude external
-
       - name: Run ament_lint_cmake
         shell: bash
         run: |
+          source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
           ament_lint_cmake
