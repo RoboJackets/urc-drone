@@ -17,13 +17,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          path: colcon_ws/src/urc-software
-          
-      - name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
+          path: colcon_ws/src/urc-drone
 
       - name: Build
         shell: bash
@@ -44,13 +38,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          path: colcon_ws/src/urc-software
-          
-      - name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
+          path: colcon_ws/src/urc-drone
 
       - name: Colcon Test
         shell: bash
