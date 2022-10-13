@@ -27,7 +27,13 @@ jobs:
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y
           colcon build
-  
+
+      - name: Run Uncrustify
+        shell: bash
+        run: |
+          touch external/AMENT_IGNORE
+          ament_uncrustify -c ament_code_style.cfg
+
   test:
     name: Test
     needs: build
