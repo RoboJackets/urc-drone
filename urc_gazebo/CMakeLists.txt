@@ -47,11 +47,11 @@ set(dependencies
 # )
 
 # Install robot spawn file.
-install(
-  PROGRAMS
-  launch/spawn_wallii.py
-  DESTINATION lib/${PROJECT_NAME}
-)
+# install(
+#   PROGRAMS
+#   launch/spawn_wallii.py
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 # Install launch, gazebo, and config files
 install(
