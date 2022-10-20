@@ -20,7 +20,14 @@ def generate_launch_description():
         ),
         launch_arguments={"world": world_path}.items()
     )
+    
+    drone = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_urc_gazebo, "launch", "spawn_drone.py")
+        )
+    )
 
     return LaunchDescription([
         gazebo,
+        drone,
     ])
