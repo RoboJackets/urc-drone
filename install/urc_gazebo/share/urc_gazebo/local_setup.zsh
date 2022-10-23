@@ -1,0 +1,1 @@
+/home/reza/Desktop/RoboNav/drone-colcon/src/build/urc_gazebo/ament_cmake_environment_hooks/local_setup.zsh
