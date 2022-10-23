@@ -3,7 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
-#include <urc_msgs/msg/velocity_pair.hpp>
+#include <urc_msgs/msg/aruco_detection.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
