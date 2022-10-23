@@ -7,18 +7,18 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
     rclcpp::Node("aruco_detector", options);
 {
     //TODO: fix following line to work with custom message
-    aurco_publisher = create_publisher(
-        "",
+    aruco_publisher = create_publisher<urc_msgs::msg::ArucoDetection>(
+        "~/aruco",
         rclcpp::SystemDefaultsQoS()
     );
 
-    //TODO: suscribe to the correct topic and QoS
-    camera_subscriber_ = image_transport::create_camera_subscription(
-      this, "/camera/image_compressed",
-      std::bind(
-        &ArucoDetector::ImageCallback, this, std::placeholders::_1,
-        std::placeholders::_2),
-      "compressed", rclcpp::SensorDataQoS().get_rmw_qos_profile());
+    //TODO: subscribe to the correct topic and QoS
+    camera_subscriber_ = create_subscription<sensor_msgs::msg::Camera>(
+      "~/camera/image_compressed",
+      rclcpp::SensorDataQoS().get_rmw_qos_profile(),
+      [this](const sensor_msg::msg::Camera msg) {
+          ImageCallback(msg)
+      });
 
     tagWidth = declare_parameter<float>("tagWidth"); //Is this good?
 }
@@ -70,10 +70,10 @@ void ArucoDetector::ImageCallback(
             aurco_message;
             aurco_message.header.stamp = image_msg->header.stamp;
             //TODO: other header messages?
-            aurco_message.info.xAngle = xAngle;
-            aurco_message.info.yAngle = yAngle;
-            aurco_message.info.distance = distance;
-            aurco_message.info.id = MarkerIDs[id];
+            aurco_message.xAngle = xAngle;
+            aurco_message.yAngle = yAngle;
+            aurco_message.distance = distance;
+            aurco_message.id = MarkerIDs[id];
             
             aruco_publisher->publish(aurco_message);
         }
