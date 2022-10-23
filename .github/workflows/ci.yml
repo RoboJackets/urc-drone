@@ -103,4 +103,4 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          # ament_lint_cmake
+          ament_lint_cmake
