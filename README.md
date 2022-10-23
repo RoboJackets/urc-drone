@@ -6,7 +6,7 @@ Welcome to the RoboJackets URC software repo! This document will give you a brie
 
 ## Installation Instructions
 
-[Follow the URC software installation instructions here!](https://github.com/RoboJackets/urc-software)
+[Follow the URC software installation instructions here!](https://github.com/RoboJackets/urc-software#installation-instructions)
 
 ## Contributing
 
