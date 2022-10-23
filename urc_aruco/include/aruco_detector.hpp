@@ -3,7 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
-#include <image_transport/image_transport.hpp>
+#include <urc_msgs/msg/velocity_pair.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -20,8 +20,8 @@ public:
     explicit ArucoDetector(const rclcpp::NodeOptions & options);
 
 private:
-    rclcpp::Publisher aurco_publisher; //TODO: set custom message type here
-    image_transport::CameraSubscriber camera_subscriber_;
+    rclcpp::Publisher<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_publisher; //TODO: set custom message type here
+    rclcpp::Subscription<sensor_msgs::msg::Camera>::SharedPtr camera_subscriber_;
 
     cv::Ptr<cv::aruco::DetectorParameters> parameters = cv::aruco::DetectorParameters::create();
     cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
