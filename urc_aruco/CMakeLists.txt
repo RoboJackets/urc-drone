@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
 project(urc_aruco)
 
+include(../cmake/default_settings.cmake)
+
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
@@ -23,11 +25,12 @@ find_package(urc_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(diagnostic_updater REQUIRED)
-find_package(urc_nanopb REQUIRED)
-find_package(urc_util REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(cv_bridge REQUIRED)
 
 include_directories(
   include
+  "/usr/include/opencv4/"
 )
 
 # Library creation
@@ -42,8 +45,7 @@ set(dependencies
   std_msgs
   sensor_msgs
   diagnostic_updater
-  urc_nanopb
-  urc_util
+  cv_bridge
 )
 
 ament_target_dependencies(${PROJECT_NAME}

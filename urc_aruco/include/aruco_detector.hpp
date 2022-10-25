@@ -4,10 +4,12 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
 #include <urc_msgs/msg/aruco_detection.hpp>
-#include <opencv2/core.hpp>
-#include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/aruco.hpp>
+#include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/camera_info.hpp>
+#include <opencv4/opencv2/core.hpp>
+#include <opencv4/opencv2/highgui.hpp>
+#include <opencv4/opencv2/imgproc.hpp>
+#include <opencv4/opencv2/aruco.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <bits/stdc++.h>
 
@@ -21,7 +23,7 @@ public:
 
 private:
     rclcpp::Publisher<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_publisher; //TODO: set custom message type here
-    rclcpp::Subscription<sensor_msgs::msg::Camera>::SharedPtr camera_subscriber_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr camera_subscriber_;
 
     cv::Ptr<cv::aruco::DetectorParameters> parameters = cv::aruco::DetectorParameters::create();
     cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
@@ -36,8 +38,8 @@ private:
     int detectedTags[6];
 
     void imageCallback(
-        const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,
-        const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg
+        const sensor_msgs::msg::Image & image_msg,
+        const sensor_msgs::msg::CameraInfo & info_msg
     );
 };
 }

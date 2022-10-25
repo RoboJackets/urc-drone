@@ -4,7 +4,7 @@ namespace aruco_detector
 {
 
 ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
-    rclcpp::Node("aruco_detector", options);
+    rclcpp::Node("aruco_detector", options)
 {
     //TODO: fix following line to work with custom message
     aruco_publisher = create_publisher<urc_msgs::msg::ArucoDetection>(
@@ -13,24 +13,24 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
     );
 
     //TODO: subscribe to the correct topic and QoS
-    camera_subscriber_ = create_subscription<sensor_msgs::msg::Camera>(
+    camera_subscriber_ = create_subscription<sensor_msgs::msg::Image>(
       "~/camera/image_compressed",
       rclcpp::SensorDataQoS().get_rmw_qos_profile(),
-      [this](const sensor_msg::msg::Camera msg) {
-          ImageCallback(msg)
+      [this](const sensor_msgs::msg::Image image_msg, const sensor_msgs::msg::CameraInfo info_msg) {
+          imageCallback(image_msg, info_msg);
       });
 
     tagWidth = declare_parameter<float>("tagWidth"); //Is this good?
 }
 
-void ArucoDetector::ImageCallback(
-    const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,
-    const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg)
+void ArucoDetector::imageCallback(
+    const sensor_msgs::msg::Image & image_msg,
+    const sensor_msgs::msg::CameraInfo & info_msg)
 {
     //get image in gray scale?
-    const auto cv_image = cv_bridge::toCvShare(image_msg, "bgr8");
-    cv::cvtColor(cv_image->image,cv_image->image,cv::COLOR_BGR2GRAY)
-    
+    const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
+    cv::cvtColor(cv_image->image,cv_image->image,cv::COLOR_BGR2GRAY);
+
     const auto camera_matrix = cv::Mat(info_msg->k).reshape(1, 3);
     detectedTags = [0,0,0,0,0,0];
 
@@ -43,7 +43,7 @@ void ArucoDetector::ImageCallback(
     for(int i = 40; i < 220; i+=60)
     {
         //detects all of the tags with the current b&w threshold
-        cv::aruco::detectMarkers((cv_image->image > i), dictionary, corners, MarkerIDs, parameters, rejects); 
+        cv::aruco::detectMarkers((cv_image->image > i), dictionary, corners, MarkerIDs, parameters, rejects);
 
         /*
         The below code makes some assumptions:
@@ -74,7 +74,7 @@ void ArucoDetector::ImageCallback(
             aurco_message.yAngle = yAngle;
             aurco_message.distance = distance;
             aurco_message.id = MarkerIDs[id];
-            
+
             aruco_publisher->publish(aurco_message);
         }
     }
