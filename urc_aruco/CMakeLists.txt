@@ -3,20 +3,6 @@ project(urc_aruco)
 
 include(../cmake/default_settings.cmake)
 
-# Default to C99
-if(NOT CMAKE_C_STANDARD)
-  set(CMAKE_C_STANDARD 99)
-endif()
-
-# Default to C++17
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 17)
-endif()
-
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -31,7 +17,6 @@ find_package(image_transport REQUIRED)
 
 include_directories(
   include
-  "/usr/include/opencv4/"
 )
 
 # Library creation
@@ -79,13 +64,10 @@ install(TARGETS
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
-
   # the following line skips the copyright linker
   set(ament_cmake_copyright_FOUND TRUE)
-
   # the following line skips cpplint (only works in a git repo)
   set(ament_cmake_cpplint_FOUND TRUE)
-
   ament_lint_auto_find_test_dependencies()
 endif()
 
