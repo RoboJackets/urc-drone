@@ -3,7 +3,7 @@
 <package format="3">
   <name>urc_aruco</name>
   <version>0.0.0</version>
-  <description>Package for directly controlling rover and joystick control.</description>
+  <description>Package for detecting the Aruco markers and publishing useful info about them.</description>
   <maintainer email="aidan.stickan@gmail.com">a-stickan</maintainer>
   <license>MIT</license>
 
@@ -12,6 +12,9 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
   <depend>urc_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>libopencv-dev</depend>
+  <depend>image_transport</depend>
   <depend>std_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>sensor_msgs</depend>

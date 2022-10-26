@@ -25,8 +25,9 @@ find_package(urc_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(diagnostic_updater REQUIRED)
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 4 REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(image_transport REQUIRED)
 
 include_directories(
   include
@@ -46,6 +47,7 @@ set(dependencies
   sensor_msgs
   diagnostic_updater
   cv_bridge
+  image_transport
 )
 
 ament_target_dependencies(${PROJECT_NAME}

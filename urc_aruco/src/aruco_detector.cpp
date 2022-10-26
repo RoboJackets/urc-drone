@@ -13,12 +13,12 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
     );
 
     //TODO: subscribe to the correct topic and QoS
-    camera_subscriber_ = create_subscription<sensor_msgs::msg::Image>(
-      "~/camera/image_compressed",
-      rclcpp::SensorDataQoS().get_rmw_qos_profile(),
-      [this](const sensor_msgs::msg::Image image_msg, const sensor_msgs::msg::CameraInfo info_msg) {
-          imageCallback(image_msg, info_msg);
-      });
+    camera_subscriber_ = image_transport::create_camera_subscription(
+      this, "/camera/image_compressed",
+      std::bind(
+        &ArucoDetector::imageCallback, this, std::placeholders::_1,
+        std::placeholders::_2),
+      "compressed", rclcpp::SensorDataQoS().get_rmw_qos_profile());
 
     tagWidth = declare_parameter<float>("tagWidth"); //Is this good?
 }
@@ -31,14 +31,15 @@ void ArucoDetector::imageCallback(
     const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
     cv::cvtColor(cv_image->image,cv_image->image,cv::COLOR_BGR2GRAY);
 
-    const auto camera_matrix = cv::Mat(info_msg->k).reshape(1, 3);
-    detectedTags = [0,0,0,0,0,0];
+    const auto camera_matrix = cv::Mat(info_msg.k).reshape(1, 3);
+    for(int i; i < 6; i++)
+        detectedTags[i] = 0;
 
-    float fovx = 2 * std::atan(cv_image.cols/(2 * camera_matrix[0])); //good chance this is a syntax error
-    float dppx = fovx / cv_image.cols;
+    float fovx = 2 * std::atan(cv_image->image.cols/(2 * camera_matrix.at<double>(0,0))); //good chance this is a syntax error
+    float dppx = fovx / cv_image->image.cols;
 
-    float fovy = 2 * std::atan(cv_image.rows/(2 * camera_matrix[5]));
-    float dppy = fovy / cv_image.rows;
+    float fovy = 2 * std::atan(cv_image->image.rows/(2 * camera_matrix.at<double>(1,1)));
+    float dppy = fovy / cv_image->image.rows;
 
     for(int i = 40; i < 220; i+=60)
     {
@@ -59,19 +60,19 @@ void ArucoDetector::imageCallback(
             detectedTags[MarkerIDs[id]] = 1;
 
             xCenter = (corners[id][1].x + corners[id][0].x) / 2;
-            xAngle = dppx * (xCenter - cv_image.cols/2);
+            xAngle = dppx * (xCenter - cv_image->image.cols/2);
 
             yCenter = (corners[id][2].y + corners[id][3].y) / 2;
-            yAngle = dppy * (yCenter - cv_image.rows/2);
+            yAngle = dppy * (yCenter - cv_image->image.rows/2);
 
             width = corners[id][1].x - corners[id][0].x;
-            distance = (knownWidth * camera_matrix[0]) / cv_image.cols; //TODO: Does this actually work??
+            distance = (tagWidth * camera_matrix.at<double>(0,0)) / width; //TODO: Does this actually work??
 
-            aurco_message;
-            aurco_message.header.stamp = image_msg->header.stamp;
+            urc_msgs::msg::ArucoDetection aurco_message;
+            aurco_message.header.stamp = info_msg.header.stamp;
             //TODO: other header messages?
-            aurco_message.xAngle = xAngle;
-            aurco_message.yAngle = yAngle;
+            aurco_message.x_angle = xAngle;
+            aurco_message.y_angle = yAngle;
             aurco_message.distance = distance;
             aurco_message.id = MarkerIDs[id];
 

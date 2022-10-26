@@ -12,6 +12,7 @@
 #include <opencv4/opencv2/aruco.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <bits/stdc++.h>
+#include <image_transport/image_transport.hpp>
 
 namespace aruco_detector
 {
@@ -23,8 +24,9 @@ public:
 
 private:
     rclcpp::Publisher<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_publisher; //TODO: set custom message type here
-    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr camera_subscriber_;
+    image_transport::CameraSubscriber camera_subscriber_;
 
+    std::vector<std::vector<cv::Point2f>> corners, rejects; // rejects will likely be unused
     cv::Ptr<cv::aruco::DetectorParameters> parameters = cv::aruco::DetectorParameters::create();
     cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
     std::vector<int> MarkerIDs;
