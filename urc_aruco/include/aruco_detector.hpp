@@ -31,11 +31,11 @@ private:
     cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
     std::vector<int> MarkerIDs;
 
-    float tagWidth; //actual tag width in cm
-    float width;
-    float xCenter, yCenter;
-    float distance;
-    float xAngle, yAngle;
+    int tagWidth; //actual tag width in cm
+    double width;
+    int xCenter, yCenter;
+    double distance;
+    double xAngle, yAngle;
 
     int detectedTags[6];
 
