@@ -40,8 +40,8 @@ private:
     int detectedTags[6];
 
     void imageCallback(
-        const sensor_msgs::msg::Image & image_msg,
-        const sensor_msgs::msg::CameraInfo & info_msg
+        const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,
+        const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg
     );
 };
 }

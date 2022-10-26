@@ -15,7 +15,7 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
     );
 
     //TODO: subscribe to the correct topic and QoS
-    camera_subscriber_ = image_transport::create_subscription(
+    camera_subscriber_ = image_transport::create_camera_subscription(
       this, "~/camera/image_raw",
       std::bind(
         &ArucoDetector::imageCallback, this, std::placeholders::_1,
@@ -24,12 +24,12 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
 }
 
 void ArucoDetector::imageCallback(
-    const sensor_msgs::msg::Image & image_msg,
-    const sensor_msgs::msg::CameraInfo & info_msg)
+    const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,
+    const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg)
 {
     //get image in gray scale?
     const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
-    cv::cvtColor(cv_image->image,cv_image->image,cv::COLOR_BGR2GRAY);
+    cv::cvtColor(cv_image->image, cv_image->image, cv::COLOR_BGR2GRAY);
 
     const auto camera_matrix = cv::Mat(info_msg.k).reshape(1, 3);
     for (int i = 0; i < 6; ++i) {
