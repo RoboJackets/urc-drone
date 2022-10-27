@@ -31,16 +31,16 @@ void ArucoDetector::imageCallback(
     const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
     cv::cvtColor(cv_image->image, cv_image->image, cv::COLOR_BGR2GRAY);
 
-    const auto camera_matrix = cv::Mat(info_msg.k).reshape(1, 3);
+    const auto camera_matrix = cv::Mat(info_msg->k).reshape(1, 3);
     for (int i = 0; i < 6; ++i) {
         detectedTags[i] = 0;
     }
         
 
-    double fovx = 2 * std::atan(cv_image->image.cols/(2 * camera_matrix.at(0,0))); //good chance this is a syntax error
+    double fovx = 2 * std::atan(cv_image->image.cols/(2 * camera_matrix.at<uint8_t>(0,0))); //good chance this is a syntax error
     double dppx = fovx / cv_image->image.cols;
 
-    double fovy = 2 * std::atan(cv_image->image.rows/(2 * camera_matrix.at(1,1)));
+    double fovy = 2 * std::atan(cv_image->image.rows/(2 * camera_matrix.at<uint8_t>(1,1)));
     double dppy = fovy / cv_image->image.rows;
 
     for (int i = 40; i < 220; i += 60)
@@ -69,10 +69,10 @@ void ArucoDetector::imageCallback(
             yAngle = dppy * (yCenter - cv_image->image.rows/2);
 
             width = corners[id][1].x - corners[id][0].x;
-            distance = (tagWidth * camera_matrix.at(0,0)) / width; //TODO: Does this actually work??
+            distance = (tagWidth * camera_matrix.at<uint8_t>(0,0)) / width; //TODO: Does this actually work??
 
             urc_msgs::msg::ArucoDetection aruco_message;
-            aruco_message.header.stamp = info_msg.header.stamp;
+            aruco_message.header.stamp = info_msg->header.stamp;
             //TODO: other header messages?
             aruco_message.x_angle = xAngle;
             aruco_message.y_angle = yAngle;
