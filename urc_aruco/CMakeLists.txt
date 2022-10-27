@@ -33,6 +33,7 @@ set(dependencies
   diagnostic_updater
   cv_bridge
   image_transport
+  OpenCV
 )
 
 ament_target_dependencies(${PROJECT_NAME}
