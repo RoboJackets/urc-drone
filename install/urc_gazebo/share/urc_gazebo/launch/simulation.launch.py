@@ -1,1 +1,0 @@
-/home/reza/Desktop/RoboNav/drone-colcon/src/urc_gazebo/launch/simulation.launch.py

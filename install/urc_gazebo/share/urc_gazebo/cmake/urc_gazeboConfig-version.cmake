@@ -1,1 +1,0 @@
-/home/reza/Desktop/RoboNav/drone-colcon/src/build/urc_gazebo/ament_cmake_core/urc_gazeboConfig-version.cmake
