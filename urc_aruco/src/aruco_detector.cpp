@@ -85,3 +85,5 @@ void ArucoDetector::imageCallback(
 }
 
 }
+
+RCLCPP_COMPONENTS_REGISTER_NODE(aruco_detector::ArucoDetector)
