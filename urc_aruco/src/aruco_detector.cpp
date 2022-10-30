@@ -6,9 +6,8 @@ namespace aruco_detector
 ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
     rclcpp::Node("aruco_detector", options)
 {
-    tagWidth = declare_parameter<int>("tagWidth"); //Is this good?
+    tagWidth = declare_parameter<int>("tagWidth");
     
-    //TODO: fix following line to work with custom message
     aruco_publisher = create_publisher<urc_msgs::msg::ArucoDetection>(
         "~/aruco",
         rclcpp::SystemDefaultsQoS()
@@ -31,18 +30,20 @@ void ArucoDetector::imageCallback(
     const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
     cv::cvtColor(cv_image->image, cv_image->image, cv::COLOR_BGR2GRAY);
 
-    const auto camera_matrix = cv::Mat(info_msg->k).reshape(1, 3);
-    for (int i = 0; i < 6; ++i) {
+    const auto camera_matrix = cv::Mat(info_msg->k).reshape(1, 3); //camera intrinsics
+
+    //Hasn't seen any tags yet
+    for (int i = 0; i < numTags; ++i) {
         detectedTags[i] = 0;
     }
         
-
+    //Calculates the fovs and the degrees per pixel based off the camera intrinsics matrix
     double fovx = 2 * std::atan(cv_image->image.cols/(2 * camera_matrix.at<uint8_t>(0,0))); //good chance this is a syntax error
     double dppx = fovx / cv_image->image.cols;
-
     double fovy = 2 * std::atan(cv_image->image.rows/(2 * camera_matrix.at<uint8_t>(1,1)));
     double dppy = fovy / cv_image->image.rows;
 
+    //Converts the image to B&W with 4 different thresholds
     for (int i = 40; i < 220; i += 60)
     {
         //detects all of the tags with the current b&w threshold
@@ -56,8 +57,8 @@ void ArucoDetector::imageCallback(
         */
         for (int id = 0; id < MarkerIDs.size(); id++)
         {
-            //checks if this tag has already been seen in this image
-            if (MarkerIDs[id] > 6 || detectedTags[MarkerIDs[id]] == 1) {
+            //checks if this tag has already been seen in this image and that it is a valid URC tag
+            if (MarkerIDs[id] > numTags-1 || detectedTags[MarkerIDs[id]] == 1) {
                 continue;
             }
             detectedTags[MarkerIDs[id]] = 1;

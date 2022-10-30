@@ -23,7 +23,7 @@ public:
     explicit ArucoDetector(const rclcpp::NodeOptions & options);
 
 private:
-    rclcpp::Publisher<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_publisher; //TODO: set custom message type here
+    rclcpp::Publisher<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_publisher;
     image_transport::CameraSubscriber camera_subscriber_;
 
     std::vector<std::vector<cv::Point2f>> corners, rejects; // rejects will likely be unused
@@ -32,12 +32,13 @@ private:
     std::vector<int> MarkerIDs;
 
     int tagWidth; //actual tag width in cm
-    double width;
+    double width; //pixel width
     int xCenter, yCenter;
-    double distance;
-    double xAngle, yAngle;
+    double distance; //Returned distance in cm
+    double xAngle, yAngle; //Should be in degrees
 
-    int detectedTags[6];
+    int numTags = 6; //There are 6 valid tags at the URC in 2023
+    int detectedTags[numTags]; //Keeps track of the tags that have already been detected in an image
 
     void imageCallback(
         const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,
