@@ -37,8 +37,8 @@ private:
     double distance; //Returned distance in cm
     double xAngle, yAngle; //Should be in degrees
 
-    int numTags = 6; //There are 6 valid tags at the URC in 2023
-    int detectedTags[numTags]; //Keeps track of the tags that have already been detected in an image
+    const int numTags = 6; //There are 6 valid tags at the URC in 2023
+    int detectedTags[6]; //Keeps track of the tags that have already been detected in an image
 
     void imageCallback(
         const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,

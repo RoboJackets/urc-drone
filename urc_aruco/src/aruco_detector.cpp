@@ -55,7 +55,7 @@ void ArucoDetector::imageCallback(
             Second, only at most one of each tag should be detected
             Finally, there will be no false positives for tags ids being used at the URC
         */
-        for (int id = 0; id < MarkerIDs.size(); id++)
+        for (int id = 0; id < static_cast<int>(MarkerIDs.size()); ++id)
         {
             //checks if this tag has already been seen in this image and that it is a valid URC tag
             if (MarkerIDs[id] > numTags-1 || detectedTags[MarkerIDs[id]] == 1) {
