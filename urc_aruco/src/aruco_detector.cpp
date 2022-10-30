@@ -6,7 +6,7 @@ namespace aruco_detector
 ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options) :
     rclcpp::Node("aruco_detector", options)
 {
-    tagWidth = declare_parameter<float>("tagWidth"); //Is this good?
+    tagWidth = declare_parameter<int>("tagWidth"); //Is this good?
     
     //TODO: fix following line to work with custom message
     aruco_publisher = create_publisher<urc_msgs::msg::ArucoDetection>(
