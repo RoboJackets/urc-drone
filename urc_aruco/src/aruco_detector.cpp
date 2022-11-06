@@ -38,10 +38,10 @@ void ArucoDetector::imageCallback(
   }
 
   //Calculates the fovs and the degrees per pixel based off the camera intrinsics matrix
-  double fovx = 2 * std::atan(cv_image->image.cols / (2 * camera_matrix.at<uint8_t>(0, 0))); //good chance this is a syntax error
-  double dppx = fovx / cv_image->image.cols;
-  double fovy = 2 * std::atan(cv_image->image.rows / (2 * camera_matrix.at<uint8_t>(1, 1)));
-  double dppy = fovy / cv_image->image.rows;
+  //double fovx = 2 * std::atan(cv_image->image.cols / (2 * camera_matrix.at<uint8_t>(0, 0))); //good chance this is a syntax error
+  //double dppx = fovx / cv_image->image.cols;
+  //double fovy = 2 * std::atan(cv_image->image.rows / (2 * camera_matrix.at<uint8_t>(1, 1)));
+  //double dppy = fovy / cv_image->image.rows;
 
   //Converts the image to B&W with 4 different thresholds
   for (int i = 40; i < 220; i += 60) {

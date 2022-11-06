@@ -33,10 +33,9 @@ private:
   std::vector<int> MarkerIDs;
 
   int tagWidth;   //actual tag width in cm
-  double width;   //pixel width
-  int xCenter, yCenter;
-  double distance;   //Returned distance in cm
-  double xAngle, yAngle;   //Should be in degrees
+  
+  std::<cv::Vec3d> rvecs, tvecs;
+  cv::Mat distCoeffs = NULL;
 
   const int numTags = 6;   //There are 6 valid tags at the URC in 2023
   int detectedTags[6];   //Keeps track of the tags that have already been detected in an image
