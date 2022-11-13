@@ -20,7 +20,7 @@ git submodule sync && git submodule update --init --recursive
 ```
 
 ```bash
-bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+bash external/PX4-Autopilot/Tools/setup/ubuntu.sh
 ```
 
 ```
