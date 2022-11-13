@@ -13,7 +13,7 @@ Make sure you have followed the installation instructions in the `urc-software` 
 sudo apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 ```
 
-In `urc/drone-colon/src/urc-drone` run,
+In `urc/drone-colon/src` run,
 
 ```bash
 git submodule sync && git submodule update --init --recursive
@@ -29,7 +29,7 @@ sudo snap install micro-ros-agent
 
 ## 2. Run Simulation Environment
 
-In `urc/drone-colon/src/urc-drone/external/PX4-Autopilot`, run
+In `urc/drone-colon/src/external/PX4-Autopilot`, run
 
 ```bash
 make px4_sitl gazebo
@@ -60,7 +60,3 @@ ros2 topic list
 ```
 
 You should see a list of topics that have the `/fmu/` prefix. Try running a `ros2 topic echo <topic_name>` to ensure that you're getting data! If you are, you're all set :)
-
-
-
-
