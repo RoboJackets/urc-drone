@@ -25,12 +25,27 @@ private:
     rclcpp::Subscription<gps::fill_me_in_later::gps>::SharedPtr gps_suscriber; //TODO
     rclcpp::Subscription<orientation::fill_me_in_later::orientation>::SharedPtr orientation_suscriber; //TODO
 
-    double droneLat, droneLon;
-    double droneHeading, dronePitch;
+    // double droneLat, droneLon;
+    // double droneHeading, dronePitch;
+    // double 
+    double xAngle;
+    double yAngle;
+    double trueDist;
+    double yaw;
+    double pitch;
+    double roll;
+    double curX;
+    double curY;
+    double curZ;
 
-    void gpsCallback();
-    void orientationCallback();
-    void arucoCallback();
+
+    void gpsCallback(double curX, double curY, double curZ);
+    void orientationCallback(double yaw, double pitch, double roll);
+    void arucoCallback(double xAngle, double yAngle, double trueDist);
+
+    bool gpsRead;
+    bool orientationRead;
+    bool arucoRead;
 }
 
 }
