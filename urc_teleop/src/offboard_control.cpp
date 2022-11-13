@@ -1,10 +1,11 @@
-#include <cstdio>
+#include "offboard_control.hpp"
 
-int main(int argc, char ** argv)
+namespace offboard_control
 {
-  (void) argc;
-  (void) argv;
-
-  printf("hello world urc_teleop package\n");
-  return 0;
+  OffboardControl::OffboardControl(const rclcpp::NodeOptions &options)
+      : rclcpp::Node("offboard_control", options)
+  {
+  }
 }
+
+RCLCPP_COMPONENTS_REGISTER_NODE(offboard_control::OffboardControl)
