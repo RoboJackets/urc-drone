@@ -1,9 +1,13 @@
 # PX4 Setup Guide
 
+**Currently only works on native Linux!!**
+
 Make sure you have followed the installation instructions in the `urc-software` repo [here](https://github.com/RoboJackets/urc-software/blob/master/documents/installation/ubuntu_installation.md) **before** following these instructions. The following steps assume that your folder structure is set up as prescribed above.
 
 ## **WSL Users**
- If you use WSL, make sure to follow the [WSL prerequisite](wsl_px4_setup_prereq.md) before continuing. 
+Currently broken.
+
+~~If you use WSL, make sure to follow the [WSL prerequisite](wsl_px4_setup_prereq.md) before continuing.~~ 
 
 ---
 
