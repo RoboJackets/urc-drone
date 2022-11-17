@@ -15,7 +15,7 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options)
 
   //TODO: subscribe to the correct topic and QoS
   camera_subscriber_ = image_transport::create_camera_subscription(
-    this, "~/camera/image_raw",
+    this, "~/camera1/image_raw",
     std::bind(
       &ArucoDetector::imageCallback, this, std::placeholders::_1,
       std::placeholders::_2),
@@ -37,18 +37,14 @@ void ArucoDetector::imageCallback(
     detectedTags[i] = 0;
   }
 
-  //Calculates the fovs and the degrees per pixel based off the camera intrinsics matrix
-  //double fovx = 2 * std::atan(cv_image->image.cols / (2 * camera_matrix.at<uint8_t>(0, 0))); //good chance this is a syntax error
-  //double dppx = fovx / cv_image->image.cols;
-  //double fovy = 2 * std::atan(cv_image->image.rows / (2 * camera_matrix.at<uint8_t>(1, 1)));
-  //double dppy = fovy / cv_image->image.rows;
-
   //Converts the image to B&W with 4 different thresholds
   for (int i = 40; i < 220; i += 60) {
     //detects all of the tags with the current b&w threshold
     cv::aruco::detectMarkers(
       (cv_image->image > i), dictionary, corners, MarkerIDs, parameters,
       rejects);
+    cv::aruco::estimatePoseSingleMarkers(corners, tagWidth/100.0, camera_matrix, NULL, rvecs, tvecs);
+
 
     /*
     The below code makes some assumptions:
@@ -63,21 +59,27 @@ void ArucoDetector::imageCallback(
       }
       detectedTags[MarkerIDs[id]] = 1;
 
-      xCenter = (corners[id][1].x + corners[id][0].x) / 2;
-      xAngle = dppx * (xCenter - cv_image->image.cols / 2);
+      std::cout << tvecs[i] << std::endl;
+      std::cout << rvecs[i] << std::endl;
 
-      yCenter = (corners[id][2].y + corners[id][3].y) / 2;
-      yAngle = dppy * (yCenter - cv_image->image.rows / 2);
+      //xCenter = (corners[id][1].x + corners[id][0].x) / 2;
+      //xAngle = dppx * (xCenter - cv_image->image.cols / 2);
+      //xAngle = rvecs[i][0];
 
-      width = corners[id][1].x - corners[id][0].x;
-      distance = (tagWidth * camera_matrix.at<uint8_t>(0, 0)) / width;      //TODO: Does this actually work??
+      //yCenter = (corners[id][2].y + corners[id][3].y) / 2;
+      //yAngle = dppy * (yCenter - cv_image->image.rows / 2);
+      //yAngle = rvecs[i][1];
+
+      //width = corners[id][1].x - corners[id][0].x;
+      //distance = tvecs[i][2];//(tagWidth * camera_matrix.at<uint8_t>(0, 0)) / width;      //TODO: Does this actually work??
 
       urc_msgs::msg::ArucoDetection aruco_message;
       aruco_message.header.stamp = info_msg->header.stamp;
       //TODO: other header messages?
-      aruco_message.x_angle = xAngle;
-      aruco_message.y_angle = yAngle;
-      aruco_message.distance = distance;
+      aruco_message.x_angle = rvecs[i][0];
+      aruco_message.y_angle = rvecs[i][1];
+      aruco_message.z_angle = rvecs[i][2];
+      aruco_message.distance = tvecs[i][2];
       aruco_message.id = MarkerIDs[id];
 
       aruco_publisher->publish(aruco_message);
