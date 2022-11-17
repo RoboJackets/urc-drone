@@ -23,6 +23,8 @@ jobs:
         shell: bash
         working-directory: drone-colcon-workspace
         run: |
+          sudo apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+          
           source /opt/ros/humble/setup.bash
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y
