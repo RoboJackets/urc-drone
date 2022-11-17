@@ -19,6 +19,9 @@ jobs:
           submodules: recursive
           path: drone-colcon-workspace/src
 
+       - name: Update submodules recursively
+        run: git submodule update --init --recursive      
+
       - name: Build
         shell: bash
         working-directory: drone-colcon-workspace
