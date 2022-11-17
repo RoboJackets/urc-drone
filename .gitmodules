@@ -1,9 +1,11 @@
 [submodule "external/px4_ros_com"]
 	path = external/px4_ros_com
 	url = https://github.com/PX4/px4_ros_com
+
 [submodule "external/px4_msgs"]
 	path = external/px4_msgs
 	url = https://github.com/PX4/px4_msgs
+
 [submodule "external/PX4-Autopilot"]
 	path = external/PX4-Autopilot
 	url = https://github.com/PX4/PX4-Autopilot.git
