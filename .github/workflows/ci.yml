@@ -29,6 +29,7 @@ jobs:
         shell: bash
         run: |
           source /opt/ros/humble/setup.bash
+          sudo pip3 install kconfiglib
           sudo apt-get update
 
       - name: Build
@@ -36,7 +37,6 @@ jobs:
         working-directory: drone-colcon-workspace
         run: |
           # sudo apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
-          # sudo pip3 install kconfiglib
           # bash ./src/external/PX4-Autopilot/Tools/setup/ubuntu.sh --no-nuttx
           source /opt/ros/humble/setup.bash
           rosdep update
