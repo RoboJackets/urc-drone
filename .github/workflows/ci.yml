@@ -21,7 +21,9 @@ jobs:
 
       - name: Update submodules recursively
         working-directory: drone-colcon-workspace/src
-        run: git submodule update --init --recursive --remote
+        run: |
+          git submodule update --init --recursive 
+          git submodule update --remote
 
       - name: Build
         shell: bash
