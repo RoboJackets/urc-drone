@@ -31,6 +31,8 @@ jobs:
           source /opt/ros/humble/setup.bash
           sudo pip3 install kconfiglib
           sudo apt-get update
+          sudo apt update
+          sudo apt install snapd
           sudo snap install micro-ros-agent
 
       - name: Build
