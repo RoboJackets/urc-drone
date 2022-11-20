@@ -91,12 +91,4 @@ void WheelOdometer::enc_callback(const urc_msgs::msg::VelocityPair & msg)
   _odometry_pub->publish(odom);
 }
 
-geometry_msgs::msg::Quaternion createQuaternionMsgFromYaw(double yaw)
-{
-  tf2::Quaternion q;
-  q.setRPY(0, 0, yaw);
-  return tf2::toMsg<tf2::Quaternion, geometry_msgs::msg::Quaternion>(q);
-}
-}
-
 RCLCPP_COMPONENTS_REGISTER_NODE(wheel_odometer::WheelOdometer)
