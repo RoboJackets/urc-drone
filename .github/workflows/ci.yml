@@ -23,16 +23,14 @@ jobs:
         working-directory: drone-colcon-workspace/src
         run: git submodule update --init --recursive      
 
-      - name: Install micro-ros
-        run: sudo snap install micro-ros-agent
-
       - name: Build
         shell: bash
         working-directory: drone-colcon-workspace
         run: |
           source /opt/ros/humble/setup.bash
+          sudo apt update
           rosdep update
-          rosdep install --from-paths src --ignore-src -r -y
+          rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
           colcon build
 
   test:
