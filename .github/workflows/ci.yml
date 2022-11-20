@@ -21,13 +21,13 @@ jobs:
 
       - name: Update submodules recursively
         working-directory: drone-colcon-workspace/src
-        run: git submodule update --init --recursive      
+        run: git submodule update --init --recursive --remote
 
       - name: Build
         shell: bash
         working-directory: drone-colcon-workspace
         run: |
-          pip3 install kconfiglib
+          sudo pip3 install kconfiglib
           sudo apt update
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
