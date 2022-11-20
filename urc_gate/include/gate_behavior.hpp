@@ -12,16 +12,13 @@ public:
   explicit GateBehavior(const rclcpp::NodeOptions & options);
 
 private:
-  rclcpp::Subscription<urc_msgs::msg::VelocityPair>::SharedPtr _enc_sub;
-  rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr _odometry_pub;
-
-  double wheel_sep;
+  rclcpp::Subscription<urc_msgs::msg::ArucoDetection>::SharedPtr _enc_sub;
+  rclcpp::Publisher<nav_msgs::msg::LandLocation>::SharedPtr _odometry_pub;
 
   float x;
   float y;
-  float yaw;
 
-  void enc_callback(const urc_msgs::msg::VelocityPair & msg);
+  void enc_callback(const urc_msgs::msg::LandLocation & msg);
   geometry_msgs::msg::Quaternion createQuaternionMsgFromYaw(double yaw);
 };
 }
