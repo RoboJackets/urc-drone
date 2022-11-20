@@ -27,11 +27,11 @@ jobs:
         shell: bash
         working-directory: drone-colcon-workspace
         run: |
-          source /opt/ros/humble/setup.bash
+          pip3 install kconfiglib
           sudo apt update
-          sudo pip3 install kconfiglib
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
+          source /opt/ros/humble/setup.bash
           colcon build
 
   test:
