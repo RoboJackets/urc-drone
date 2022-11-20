@@ -30,6 +30,7 @@ jobs:
         working-directory: drone-colcon-workspace
         run: |
           sudo pip3 install kconfiglib
+          bash /src/external/PX4-Autopilot/Tools/setup/ubuntu.sh
           sudo apt update
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
