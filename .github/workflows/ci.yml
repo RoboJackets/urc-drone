@@ -29,6 +29,7 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           sudo apt update
+          sudo pip3 install kconfiglib
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
           colcon build
