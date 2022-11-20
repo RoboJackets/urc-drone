@@ -17,16 +17,34 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          path: drone-colcon-workspace/src/urc-drone
+          path: drone-colcon-workspace/src
+
+      - name: Update submodules recursively
+        working-directory: drone-colcon-workspace/src
+        run: |
+          git submodule update --init --recursive 
+          git submodule update --remote
+
+      - name: Update Dependencies
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          sudo pip3 install kconfiglib
+          sudo apt-get update
+          sudo apt update
+          sudo apt install -y snapd 
+          sudo snap install micro-ros-agent
 
       - name: Build
         shell: bash
         working-directory: drone-colcon-workspace
         run: |
+          # sudo apt install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+          # bash ./src/external/PX4-Autopilot/Tools/setup/ubuntu.sh --no-nuttx
           source /opt/ros/humble/setup.bash
           rosdep update
-          rosdep install --from-paths src --ignore-src -r -y
-          colcon build
+          rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
+          colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
 
   test:
     name: Test
@@ -38,7 +56,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          path: drone-colcon-workspace/src/urc-drone
+          path: drone-colcon-workspace/src
 
       - name: Colcon Test
         shell: bash
