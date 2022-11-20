@@ -32,7 +32,7 @@ jobs:
           sudo pip3 install kconfiglib
           sudo apt-get update
           sudo apt update
-          sudo apt install snapd
+          sudo apt install -y snapd 
           sudo snap install micro-ros-agent
 
       - name: Build
