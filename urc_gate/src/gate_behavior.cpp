@@ -1,4 +1,3 @@
-//much of this code is imported from wheel odometer
 #include "gate_behavior.hpp"
 
 namespace gate_behavior
@@ -7,23 +6,37 @@ namespace gate_behavior
 GateBehavior::GateBehavior(const rclcpp::NodeOptions & options)
 : rclcpp::Node("gate_behavior", options)
 {
-  _enc_sub = create_subscription<urc_msgs::msg::VelocityPair>(
+    aruco_location = create_subscription<urc_msgs::msg::aruco>(
     "~/aruco",
     rclcpp::SystemDefaultsQoS(),
-    [this](const urc_msgs::msg::VelocityPair msg)
-    {GateBehavior::enc_callback(msg);});
+    [this](float lon, double lat)
+    {aurcoCallback(lon, lat);});
 
-  _odometry_pub = create_publisher<nav_msgs::msg::Odometry>(
-    "~/gate",
-    1000);
+    possible_locations = create_subscription<urc_msgs::msg::possibleLocations>(
+    "~/possibleLocations",
+    rclcpp::SystemDefaultsQoS(),
+    [this](float[][] possibleLocations)
+    {locationCallback(possibleLocations);});
 
+  _odometry_pub = create_publisher<urc_msgs::msg::landLocation>(
+    "~/landlocation");
 
-  // initialize position - map published is relative to position at time t=0
-  x = 0;
-  y = 0;
-  yaw = 0;
+  arucoRead = false;
+  locationRead = false;
+}
+
+void GateBehavior::arucoCallback(float lon, float lat) {
+  this->lon = lon;
+  this->lat = lat;
+  arucoRead = true;
+}
+
+void GateBehavior::locationCallback(float[][] possibleLocations) {
+  this->lon = possibleLocations[0];
+  this->lat = possibleLocations[1];
+  locationRead = true;
 }
 
 }
 
-RCLCPP_COMPONENTS_REGISTER_NODE(wheel_odometer::WheelOdometer)
+RCLCPP_COMPONENTS_REGISTER_NODE(gate_behavior::GateBehavior)
