@@ -15,11 +15,11 @@ private:
   rclcpp::Subscription<urc_msgs::msg::ArucoDetection>::SharedPtr _enc_sub;
   rclcpp::Publisher<nav_msgs::msg::LandLocation>::SharedPtr _odometry_pub;
 
-  float x;
-  float y;
+  float lon;
+  float lat;
 
-  void enc_callback(const urc_msgs::msg::LandLocation & msg);
-  geometry_msgs::msg::Quaternion createQuaternionMsgFromYaw(double yaw);
+  void GateBehavior::arucoCallback(float lon, float lat);
+  void GateBehavior::locationCallback(float[][] possibleLocations);
 };
 }
 
