@@ -26,6 +26,9 @@ void ArucoDetector::imageCallback(
   const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,
   const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg)
 {
+  //delete this before PR
+  RCLCPP_INFO(this->get_logger(), "Recieved the image!");
+  
   //get image in gray scale?
   const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
   cv::cvtColor(cv_image->image, cv_image->image, cv::COLOR_BGR2GRAY);
