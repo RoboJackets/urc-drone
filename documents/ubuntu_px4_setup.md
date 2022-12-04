@@ -1,13 +1,31 @@
 # PX4 Setup Guide
 
-**Currently only works on native Linux!!**
+**Currently only works on native Linux and WSL**
 
 Make sure you have followed the installation instructions in the `urc-software` repo [here](https://github.com/RoboJackets/urc-software/blob/master/documents/installation/ubuntu_installation.md) **before** following these instructions. The following steps assume that your folder structure is set up as prescribed above.
 
 ## **WSL Users**
-Currently broken.
+## 1. Set systemd flag in WSL distro settings
 
-~~If you use WSL, make sure to follow the [WSL prerequisite](wsl_px4_setup_prereq.md) before continuing.~~ 
+## 2. Enter the WSL config file
+```bash
+sudo nano /etc/wsl.conf
+```
+## 3. Inside the file, type
+```
+[boot]
+systemd=true
+```
+Press CTRL+O and CTRL+X to save changes.
+
+## 4. Close the terminal, open a Powershell window and type
+```bash
+wsl --shutdown
+```
+
+## 5. Open a new Ubuntu window and continue with the rest of the setup.
+
+**If the sudo snap install still does not work, uninstall WSL and follow [URC Software Setup Instructions](https://github.com/RoboJackets/urc-software/blob/master/documents/installation/ubuntu_installation.md)**
 
 ---
 
