@@ -13,13 +13,24 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options)
     rclcpp::SystemDefaultsQoS()
   );
 
-  //TODO: subscribe to the correct topic and QoS
+  //TODO: im sus of this does this actually work
   camera_subscriber_ = image_transport::create_camera_subscription(
-    this, "~/camera1/image_raw",
+    this, "~/camera1",
     std::bind(
       &ArucoDetector::imageCallback, this, std::placeholders::_1,
       std::placeholders::_2),
     "raw", rclcpp::SensorDataQoS().get_rmw_qos_profile());
+    
+    
+    /*
+    camera_subscriber = create_subscription<sensor_msgs::msg::Image>(
+      "~/camera1/image_raw", rclcpp::SensorDataQos(), [this](const sensor_msgs::msg::Image::ConstSharedPtr image_msg, const sensor_msgs::msg::CameraInfo::ConstSharedPtr info_msg) {
+
+      imageCallback(image_msg, info_msg); 
+    });
+    
+    )
+    */
 }
 
 void ArucoDetector::imageCallback(
@@ -27,7 +38,9 @@ void ArucoDetector::imageCallback(
   const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg)
 {
   //delete this before PR
-  RCLCPP_INFO(this->get_logger(), "Recieved the image!");
+  RCLCPP_INFO(this->get_logger(), "Received the image!");
+  
+  
   
   //get image in gray scale?
   const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
@@ -39,6 +52,14 @@ void ArucoDetector::imageCallback(
   for (int i = 0; i < numTags; ++i) {
     detectedTags[i] = 0;
   }
+
+
+
+
+
+
+
+
 
   //Converts the image to B&W with 4 different thresholds
   for (int i = 40; i < 220; i += 60) {
@@ -88,6 +109,16 @@ void ArucoDetector::imageCallback(
       aruco_publisher->publish(aruco_message);
     }
   }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
 
 }
