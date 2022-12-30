@@ -37,6 +37,7 @@
 	
 	<gazebo reference="arduino" />
 	
+	<!--
 	<gazebo reference="camera_link">
 		<sensor type="camera" name="camera1">
 			<update_rate>30</update_rate>
@@ -74,6 +75,7 @@
 			</plugin>
 		</sensor>
     </gazebo>
+    -->
     
     <gazebo reference="cam/front">
           <sensor name="front_sensor" type="camera">
