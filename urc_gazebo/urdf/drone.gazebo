@@ -83,7 +83,7 @@
               <ros>
                 <namespace>/image</namespace>
                 <remapping>~/image_raw:=front_img</remapping>
-                <remapping>~/camera_info:=front_info</remapping>
+                <remapping>~/camera_info:=camera_info</remapping>
               </ros>
               <initial_orientation_as_reference>false</initial_orientation_as_reference>
             </plugin>
@@ -117,6 +117,7 @@
               <ros>
                 <namespace>/image</namespace>
                 <remapping>~/image_raw:=bottom_img</remapping>
+               
                 <remapping>~/camera_info:=bottom_info</remapping>
               </ros>
               <initial_orientation_as_reference>false</initial_orientation_as_reference>
