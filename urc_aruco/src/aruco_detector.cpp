@@ -14,6 +14,9 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options)
   );
   
   //works now
+  //https://github.com/ros-perception/image_common/issues/121 for imagetransport pub/subs
+  
+  
   camera_subscriber_ = image_transport::create_camera_subscription(
     this, "/image/front_img",
     std::bind(
@@ -29,44 +32,40 @@ void ArucoDetector::imageCallback(
   const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg)
 {
   //delete this before PR
-  RCLCPP_INFO(this->get_logger(), "Received the image!");
-  
-  //logic temporarily commented out
-  /*
+  //RCLCPP_INFO(this->get_logger(), "Received the image!");
+  cv::Ptr<cv::aruco::DetectorParameters> parameters = cv::aruco::DetectorParameters::create();
+  cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(
+    cv::aruco::DICT_4X4_50);
+
   //get image in gray scale?
   const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
   cv::cvtColor(cv_image->image, cv_image->image, cv::COLOR_BGR2GRAY);
 
   const auto camera_matrix = cv::Mat(info_msg->k).reshape(1, 3);   //camera intrinsics
+  cv::Mat distCoeffs = cv::Mat(info_msg->d);
 
   //Hasn't seen any tags yet
   for (int i = 0; i < numTags; ++i) {
     detectedTags[i] = 0;
   }
-  */
-
-
-
-
-
-
-/*
-
+  
+  
   //Converts the image to B&W with 4 different thresholds
   for (int i = 40; i < 220; i += 60) {
     //detects all of the tags with the current b&w threshold
     cv::aruco::detectMarkers(
       (cv_image->image > i), dictionary, corners, MarkerIDs, parameters,
       rejects);
-    cv::aruco::estimatePoseSingleMarkers(corners, tagWidth/100.0, camera_matrix, NULL, rvecs, tvecs);
+    cv::aruco::estimatePoseSingleMarkers(corners, tagWidth/100.0, camera_matrix, distCoeffs, rvecs, tvecs);
 
-
-    
-    //The below code makes some assumptions:
-       //First, the only tags that should be published are the tags used at the URC
-       //Second, only at most one of each tag should be detected
-       //Finally, there will be no false positives for tags ids being used at the URC
-    
+    /*
+    The below code makes some assumptions:
+       First, the only tags that should be published are the tags used at the URC
+       Second, only at most one of each tag should be detected
+       Finally, there will be no false positives for tags ids being used at the URC
+     */
+     
+    /*
     for (int id = 0; id < static_cast<int>(MarkerIDs.size()); ++id) {
       //checks if this tag has already been seen in this image and that it is a valid URC tag
       if (MarkerIDs[id] > numTags - 1 || detectedTags[MarkerIDs[id]] == 1) {
@@ -99,8 +98,9 @@ void ArucoDetector::imageCallback(
 
       aruco_publisher->publish(aruco_message);
     }
+    */
   }
-  */
+  
   
   
   

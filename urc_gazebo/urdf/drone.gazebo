@@ -115,10 +115,11 @@
           <sensor name="bottom_sensor" type="camera">
             <plugin name="bottom_sensor" filename="libgazebo_ros_camera.so">
               <ros>
-                <namespace>/image</namespace>
+              <!-- renamed so aruco detection works on bottom camera -->
+                <namespace>/image2</namespace>
                 <remapping>~/image_raw:=bottom_img</remapping>
-               
-                <remapping>~/camera_info:=bottom_info</remapping>
+                <!-- probably redundant, but keeping it for now -->
+                <remapping>~/camera_info:=camera_info</remapping>
               </ros>
               <initial_orientation_as_reference>false</initial_orientation_as_reference>
             </plugin>

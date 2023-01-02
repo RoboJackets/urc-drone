@@ -27,9 +27,6 @@ private:
   image_transport::CameraSubscriber camera_subscriber_;
 
   std::vector<std::vector<cv::Point2f>> corners, rejects;   // rejects will likely be unused
-  cv::Ptr<cv::aruco::DetectorParameters> parameters = cv::aruco::DetectorParameters::create();
-  cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(
-    cv::aruco::DICT_4X4_50);
   std::vector<int> MarkerIDs;
 
   int tagWidth;   //actual tag width in cm
@@ -39,7 +36,7 @@ private:
   double xAngle, yAngle;   //Should be in degrees
 
   std::vector<cv::Vec3d> rvecs, tvecs;
-  //cv::Mat distCoeffs = NULL;
+
 
   const int numTags = 6;   //There are 6 valid tags at the URC in 2023
   int detectedTags[6];   //Keeps track of the tags that have already been detected in an image
