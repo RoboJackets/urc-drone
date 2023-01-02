@@ -65,7 +65,7 @@ void ArucoDetector::imageCallback(
        Finally, there will be no false positives for tags ids being used at the URC
      */
      
-    /*
+    
     for (int id = 0; id < static_cast<int>(MarkerIDs.size()); ++id) {
       //checks if this tag has already been seen in this image and that it is a valid URC tag
       if (MarkerIDs[id] > numTags - 1 || detectedTags[MarkerIDs[id]] == 1) {
@@ -98,7 +98,7 @@ void ArucoDetector::imageCallback(
 
       aruco_publisher->publish(aruco_message);
     }
-    */
+    
   }
   
   
