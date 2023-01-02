@@ -51,10 +51,10 @@ void ArucoDetector::imageCallback(
   
   
   //Converts the image to B&W with 4 different thresholds
-  for (int i = 40; i < 220; i += 60) {
+  for (int i = 0; i < 3; ++i) {
     //detects all of the tags with the current b&w threshold
     cv::aruco::detectMarkers(
-      (cv_image->image > i), dictionary, corners, MarkerIDs, parameters,
+      (cv_image->image > i * 60 + 40), dictionary, corners, MarkerIDs, parameters,
       rejects);
     cv::aruco::estimatePoseSingleMarkers(corners, tagWidth/100.0, camera_matrix, distCoeffs, rvecs, tvecs);
 
@@ -73,8 +73,10 @@ void ArucoDetector::imageCallback(
       }
       detectedTags[MarkerIDs[id]] = 1;
 
-      std::cout << tvecs[i] << std::endl;
-      std::cout << rvecs[i] << std::endl;
+      std::cout << "\n\n" << "Distance: " << tvecs[i][2] << std::endl;
+      std::cout << "X-Angle: " << rvecs[i][0] << std::endl;
+      std::cout << "Y-Angle: " << rvecs[i][1] << std::endl;
+      std::cout << "Z-Angle: " << rvecs[i][2] << std::endl;
 
       //xCenter = (corners[id][1].x + corners[id][0].x) / 2;
       //xAngle = dppx * (xCenter - cv_image->image.cols / 2);

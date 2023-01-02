@@ -1,0 +1,4 @@
+msg/ArucoDetection.idl
+msg/ArucoDetection.msg
+msg/ArucoLocation.idl
+msg/ArucoLocation.msg
