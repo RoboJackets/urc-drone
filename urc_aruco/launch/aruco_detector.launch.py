@@ -23,10 +23,10 @@ def generate_launch_description():
             package='urc_aruco',
             executable='urc_aruco_ArucoLocation',
             output='screen',
-            parameters=[
-                PathJoinSubstitution([FindPackageShare('urc_aruco'), 'config',
-                                     'aruco_location_params.yaml'])
-            ]
+            #parameters=[
+            #    PathJoinSubstitution([FindPackageShare('urc_aruco'), 'config',
+            #                         'aruco_location_params.yaml'])
+            #]
             )
         
       

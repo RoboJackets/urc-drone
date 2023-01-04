@@ -14,22 +14,22 @@ ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
 
 
   //Aruco Tag Angles and Distance relative to camera.
-  //TODO type correct?
+
   aruco_subscriber = create_subscription<urc_msgs::msg::ArucoDetection>(
     "/aruco", rclcpp::SystemDefaultsQoS(), [this](const urc_msgs::msg::ArucoDetection
     arucomsg) {
       arucoCallback(arucomsg);
     });
   //GPS Location of Drone
-  //TODO QoS Correct?
+
   gps_subscriber = create_subscription<sensor_msgs::msg::NavSatFix>(
-    "/gps/data", rclcpp::SystemDefaultsQoS(), [this](const sensor_msgs::msg::NavSatFix gpsmsg) {
+    "/gps/data", rclcpp::SensorDataQoS(), [this](const sensor_msgs::msg::NavSatFix gpsmsg) {
       gpsCallback(gpsmsg);
     });
   //Yaw, Pitch and Roll
-  //TODO QoS Correct?
+ 
   orientation_subscriber = create_subscription<sensor_msgs::msg::Imu>(
-    "/imu/data", rclcpp::SystemDefaultsQoS(), [this](const sensor_msgs::msg::Imu imumsg) {
+    "/imu/data", rclcpp::SensorDataQoS(), [this](const sensor_msgs::msg::Imu imumsg) {
       orientationCallback(imumsg);
     });
 
