@@ -7,10 +7,11 @@ ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
 : rclcpp::Node("aruco_location", options)
 {
 
-  location_publisher = create_publisher<double*>(
-    "~/aruco/tag_location",
+  location_publisher = create_publisher<urc_msgs::msg::ArucoLocation>(
+    "~/tag_location",
     rclcpp::SystemDefaultsQoS()
   );
+
 
   //Aruco Tag Angles and Distance relative to camera.
   //TODO type correct?
@@ -21,7 +22,7 @@ ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
     });
   //GPS Location of Drone
   //TODO QoS Correct?
-  gps_suscriber = create_subscription<sensor_msgs::msg::NavSatFix>(
+  gps_subscriber = create_subscription<sensor_msgs::msg::NavSatFix>(
     "/gps/data", rclcpp::SystemDefaultsQoS(), [this](const sensor_msgs::msg::NavSatFix gpsmsg) {
       gpsCallback(gpsmsg);
     });
@@ -48,7 +49,7 @@ double ArucoLocation::getNextLatitude(double d, double xAngle, double yaw, doubl
 //TODO diagnose
 double ArucoLocation::getNextLongitude(double d, double xAngle, double yaw, double r) { //wouldn't this be xAngle+yaw
   if(!arucoRead || !gpsRead || !orientationRead) return -1.0;
-  return droneLon + atan2(sin(xAngle + yaw)*sin(d/r)*cos(droneLat), cos(d/R)-sin(droneLat)*sin(getNextLatitude(d, xAngle, yaw, r)));
+  return droneLon + atan2(sin(xAngle + yaw)*sin(d/r)*cos(droneLat), cos(d/r)-sin(droneLat)*sin(getNextLatitude(d, xAngle, yaw, r)));
 }
 
 double ArucoLocation::findD(double trueD, double yAngle, double pitch){
@@ -73,6 +74,11 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & arucomsg
   this->trueDist = trueDist;
   arucoRead = true;
   */
+  //Is type casting needed here?
+  xAngle = arucomsg.x_angle;
+  yAngle = arucomsg.y_angle;
+  trueDist = arucomsg.distance;
+  std::cout << "\n\n" << "Distance: " << trueDist << std::endl;
 }
 
 void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gpsmsg) {
@@ -82,6 +88,8 @@ void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gpsmsg) {
   this->curZ = curZ;
   gpsRead = true;
   */
+  droneLat = double(gpsmsg.latitude);
+  droneLon = double(gpsmsg.longitude);
 }
 
 void ArucoLocation::orientationCallback(const sensor_msgs::msg::Imu & imumsg) {
@@ -91,7 +99,9 @@ void ArucoLocation::orientationCallback(const sensor_msgs::msg::Imu & imumsg) {
   this->roll = roll;
   orientationRead = true;
   */
+  //TODO convert quaternion into double values of roll, pitch, yaw
+  geometry_msgs::msg::Quaternion orientation = imumsg.orientation;
 }
 
 }
-RCLCPP_COMPONENTS_REGISTER_NODE(aruco_detector::ArucoDetector)
+RCLCPP_COMPONENTS_REGISTER_NODE(aruco_location::ArucoLocation)
