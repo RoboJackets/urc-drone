@@ -9,6 +9,8 @@
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 #include <geometry_msgs/msg/quaternion.hpp>
+#include <string>
+// #include <tf2::Quaternion.hpp>  DOES NOT WORK
 
 namespace aruco_location
 {
@@ -19,6 +21,8 @@ public:
     explicit ArucoLocation(const rclcpp::NodeOptions & options);
 
 private:
+
+
 
     double getNextLatitude(double d, double xAngle, double yaw, double r);
     double getNextLongitude(double d, double xAngle, double yaw, double r);
@@ -31,26 +35,29 @@ private:
 
 
     //TODO likely need type changes (sensor documentation)
-    
+    //Variables given by Aruco Detector Node
+    //gpsRead and orientationRead have the purpose of determining whether data has been received for those yet.
     double xAngle;
     double yAngle;
+    double zAngle;
     double trueDist;
+    double tagId;
+    bool arucoRead;
     
-    double droneLat, droneLon;
+    double droneLat;
+    double droneLon;
+    double droneAlt;
+    bool gpsRead;
     
     double yaw;
     double pitch;
     double roll;
+    bool orientationRead;
 
-
+    
     void arucoCallback(const urc_msgs::msg::ArucoDetection & arucomsg);
     void gpsCallback(const sensor_msgs::msg::NavSatFix & gpsmsg);
     void orientationCallback(const sensor_msgs::msg::Imu & imumsg);
-
-
-    bool gpsRead;
-    bool orientationRead;
-    bool arucoRead;
 };
 
 }
