@@ -48,8 +48,9 @@ double ArucoLocation::getNextLongitude(double d, double xAngle, double yaw, doub
     return -1.0;
   }
   return droneLon + atan2(
-    sin(xAngle + yaw) * sin(d / r) * cos(droneLat), cos(d / r) - sin(
-      droneLat) * sin(getNextLatitude(d, xAngle, yaw, r)));
+  sin(xAngle + yaw) * sin(d / r) * cos(droneLat), cos(d / r) - sin(
+      droneLat) * sin(getNextLatitude(d, xAngle, yaw, r))
+      );
 }
 
 double ArucoLocation::findD(double trueD, double yAngle, double pitch)
@@ -61,24 +62,34 @@ double ArucoLocation::findD(double trueD, double yAngle, double pitch)
 }
 
 
-//TODO rework callbacks
-//Guess: Publishes a message, use pointers to access required values inside callback
-//needs to read all 3 topics before implementation
+/*
+This code assumes that the polling rate of the GPS and IMU sensors are high enough
+so that when the aruco callback meets its requirements (GPS and Orientation read) the
+sensor values will be recent enough to make a Lat/Lon calculation.
+
+If this becomes a problem, try using callback groups using single-threaded executors
+*/
+
 void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_msg)
 {
-  RCLCPP_INFO(this->get_logger(), "Received aruco!");
+  //RCLCPP_INFO(this->get_logger(), "Received aruco!");
   xAngle = aruco_msg.x_angle;
   yAngle = aruco_msg.y_angle;
   zAngle = aruco_msg.z_angle;
   trueDist = aruco_msg.distance;
   tagId = aruco_msg.id;
-  std::cout << "\n\n" << "Distance: " << trueDist << std::endl;
+
 
   if (gpsRead && orientationRead) {
+    //TODO Implement main logic for calculating Tag location
+    //std::cout << "droneLat: " << droneLat << std::endl;
+    //std::cout << "Roll: " << roll << std::endl;
+    double d = findD(trueDist,yAngle,pitch); 
+    double r = 1; //???   
     urc_msgs::msg::ArucoLocation location_message;
     location_message.header.stamp = aruco_msg.header.stamp;
-    location_message.lon = 0;
-    location_message.lat = 0;
+    location_message.lon = getNextLongitude(d,xAngle,yaw,r);
+    location_message.lat = getNextLatitude(d,xAngle,yaw,r);
     location_message.id = aruco_msg.id;
     location_publisher->publish(location_message);
   }
@@ -90,7 +101,7 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
 
 void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
 {
-  RCLCPP_INFO(this->get_logger(), "Received GPS!");
+  //RCLCPP_INFO(this->get_logger(), "Received GPS!");
   droneLat = double(gps_msg.latitude);
   droneLon = double(gps_msg.longitude);
   droneAlt = double(gps_msg.altitude);
@@ -104,16 +115,18 @@ void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
 */
 void ArucoLocation::orientationCallback(const sensor_msgs::msg::Imu & imu_msg)
 {
-  RCLCPP_INFO(this->get_logger(), "Received orientaion!");
-  roll = 0;
-  pitch = 0;
-  yaw = 0;
-  // geometry_msgs::msg::Quaternion rawOrientation = imu_msg.orientation;
-  // tf2::Quaternion convertedOrientation;
-  // tf2::fromMsg(rawOrienation, convertedOrientation);
-  // tf2::Matrix3x3 m(convertedOrienation);
-  // m.getRPY(roll, pitch, yaw);
-  //TODO convert quaternion into double values of roll, pitch, yaw
+  //RCLCPP_INFO(this->get_logger(), "Received orientaion!");
+  roll = -1;
+  pitch = -1;
+  yaw = -1;
+  geometry_msgs::msg::Quaternion rawOrientation = imu_msg.orientation;
+  tf2::Quaternion convertedOrientation;
+  tf2::fromMsg(rawOrientation, convertedOrientation);
+  tf2::Matrix3x3 m(convertedOrientation);
+  m.getRPY(roll, pitch, yaw);
+  roll = double(roll);
+  pitch = double(pitch);
+  yaw = double(yaw);
   orientationRead = true;
 }
 

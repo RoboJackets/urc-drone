@@ -10,7 +10,10 @@
 #include <sensor_msgs/msg/imu.hpp>
 #include <geometry_msgs/msg/quaternion.hpp>
 #include <string>
-// #include <tf2::Quaternion.hpp>  DOES NOT WORK
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2/LinearMath/Matrix3x3.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+
 
 namespace aruco_location
 {

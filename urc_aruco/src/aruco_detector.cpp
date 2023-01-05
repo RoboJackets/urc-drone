@@ -71,10 +71,13 @@ void ArucoDetector::imageCallback(
       }
       detectedTags[MarkerIDs[id]] = 1;
 
+      //Uncomment to verify message publishing
+      /*
       std::cout << "\n\n" << "Distance: " << tvecs[i][2] << std::endl;
       std::cout << "X-Angle: " << rvecs[i][0] << std::endl;
       std::cout << "Y-Angle: " << rvecs[i][1] << std::endl;
       std::cout << "Z-Angle: " << rvecs[i][2] << std::endl;
+      */
 
       //xCenter = (corners[id][1].x + corners[id][0].x) / 2;
       //xAngle = dppx * (xCenter - cv_image->image.cols / 2);
