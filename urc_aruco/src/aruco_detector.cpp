@@ -12,19 +12,19 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options)
     "~/aruco",
     rclcpp::SystemDefaultsQoS()
   );
-  
+
   //works now
   //https://github.com/ros-perception/image_common/issues/121 for imagetransport pub/subs
-  
-  
+
+
   camera_subscriber_ = image_transport::create_camera_subscription(
     this, "/image/front_img",
     std::bind(
       &ArucoDetector::imageCallback, this, std::placeholders::_1,
       std::placeholders::_2),
     "raw", rclcpp::SensorDataQoS().get_rmw_qos_profile());
-    
-   
+
+
 }
 
 void ArucoDetector::imageCallback(
@@ -48,15 +48,17 @@ void ArucoDetector::imageCallback(
   for (int i = 0; i < numTags; ++i) {
     detectedTags[i] = 0;
   }
-  
-  
+
+
   //Converts the image to B&W with 4 different thresholds
   for (int i = 0; i < 3; ++i) {
     //detects all of the tags with the current b&w threshold
     cv::aruco::detectMarkers(
       (cv_image->image > i * 60 + 40), dictionary, corners, MarkerIDs, parameters,
       rejects);
-    cv::aruco::estimatePoseSingleMarkers(corners, tagWidth/100.0, camera_matrix, distCoeffs, rvecs, tvecs);
+    cv::aruco::estimatePoseSingleMarkers(
+      corners, tagWidth / 100.0, camera_matrix, distCoeffs,
+      rvecs, tvecs);
 
     /*
     The below code makes some assumptions:
@@ -64,8 +66,8 @@ void ArucoDetector::imageCallback(
        Second, only at most one of each tag should be detected
        Finally, there will be no false positives for tags ids being used at the URC
      */
-     
-    
+
+
     for (int id = 0; id < static_cast<int>(MarkerIDs.size()); ++id) {
       //checks if this tag has already been seen in this image and that it is a valid URC tag
       if (MarkerIDs[id] > numTags - 1 || detectedTags[MarkerIDs[id]] == 1) {
@@ -100,18 +102,10 @@ void ArucoDetector::imageCallback(
 
       aruco_publisher->publish(aruco_message);
     }
-    
+
   }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
 }
 
 }

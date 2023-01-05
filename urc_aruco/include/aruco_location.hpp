@@ -18,51 +18,46 @@ namespace aruco_location
 class ArucoLocation : public rclcpp::Node
 {
 public:
-    explicit ArucoLocation(const rclcpp::NodeOptions & options);
+  explicit ArucoLocation(const rclcpp::NodeOptions & options);
 
 private:
+  double getNextLatitude(double d, double xAngle, double yaw, double r);
+  double getNextLongitude(double d, double xAngle, double yaw, double r);
+  double findD(double trueD, double yAngle, double pitch);
+
+  rclcpp::Publisher<urc_msgs::msg::ArucoLocation>::SharedPtr location_publisher;
+  rclcpp::Subscription<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_subscriber;
+  rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr gps_subscriber;
+  rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr orientation_subscriber;
 
 
+  //TODO likely need type changes (sensor documentation)
+  //Variables given by Aruco Detector Node
+  //gpsRead and orientationRead have the purpose of determining whether data has been received for those yet.
+  double xAngle;
+  double yAngle;
+  double zAngle;
+  double trueDist;
+  double tagId;
+  bool arucoRead;
 
-    double getNextLatitude(double d, double xAngle, double yaw, double r);
-    double getNextLongitude(double d, double xAngle, double yaw, double r);
-    double findD(double trueD, double yAngle, double pitch);
+  double droneLat;
+  double droneLon;
+  double droneAlt;
+  bool gpsRead;
 
-    rclcpp::Publisher<urc_msgs::msg::ArucoLocation>::SharedPtr location_publisher;
-    rclcpp::Subscription<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_subscriber;
-    rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr gps_subscriber;
-    rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr orientation_subscriber;
+  double yaw;
+  double pitch;
+  double roll;
+  bool orientationRead;
 
 
-    //TODO likely need type changes (sensor documentation)
-    //Variables given by Aruco Detector Node
-    //gpsRead and orientationRead have the purpose of determining whether data has been received for those yet.
-    double xAngle;
-    double yAngle;
-    double zAngle;
-    double trueDist;
-    double tagId;
-    bool arucoRead;
-    
-    double droneLat;
-    double droneLon;
-    double droneAlt;
-    bool gpsRead;
-    
-    double yaw;
-    double pitch;
-    double roll;
-    bool orientationRead;
-
-    
-    void arucoCallback(const urc_msgs::msg::ArucoDetection & arucomsg);
-    void gpsCallback(const sensor_msgs::msg::NavSatFix & gpsmsg);
-    void orientationCallback(const sensor_msgs::msg::Imu & imumsg);
+  void arucoCallback(const urc_msgs::msg::ArucoDetection & arucomsg);
+  void gpsCallback(const sensor_msgs::msg::NavSatFix & gpsmsg);
+  void orientationCallback(const sensor_msgs::msg::Imu & imumsg);
 };
 
 }
-
-
 
 
 #endif

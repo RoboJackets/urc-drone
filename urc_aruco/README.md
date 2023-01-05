@@ -1,8 +1,9 @@
 # URC Aruco
 
-This package is a collection of nodes focused on detecting ARUCO tags.
+This package is a collection of nodes focused on detecting and mapping ARUCO tags.
 
 ## Aruco Detector
+
 Focuses on detecting aruco tags if they are found, and then determining basic data about the found tag.
 - Subscribes to an image publisher
 - Uses callback method when any image is received:
@@ -12,4 +13,5 @@ Focuses on detecting aruco tags if they are found, and then determining basic da
 
 
 ## Aruco Location
-Focuses on using info from Aruco Detector (to which this node publishes) to determine coordinates of the drone.
+
+Focuses on using info from Aruco Detector (to which this node publishes) to determine GPS coordinates of the drone.
