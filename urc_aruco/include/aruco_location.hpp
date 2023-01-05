@@ -39,22 +39,22 @@ private:
   double zAngle;
   double trueDist;
   double tagId;
-  bool arucoRead;
+  bool arucoRead = false;
 
   double droneLat;
   double droneLon;
   double droneAlt;
-  bool gpsRead;
+  bool gpsRead = false;
 
   double yaw;
   double pitch;
   double roll;
-  bool orientationRead;
+  bool orientationRead = false;
 
 
-  void arucoCallback(const urc_msgs::msg::ArucoDetection & arucomsg);
-  void gpsCallback(const sensor_msgs::msg::NavSatFix & gpsmsg);
-  void orientationCallback(const sensor_msgs::msg::Imu & imumsg);
+  void arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_msg);
+  void gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg);
+  void orientationCallback(const sensor_msgs::msg::Imu & imu_msg);
 };
 
 }

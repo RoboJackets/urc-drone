@@ -13,10 +13,9 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options)
     rclcpp::SystemDefaultsQoS()
   );
 
-  //works now
-  //https://github.com/ros-perception/image_common/issues/121 for imagetransport pub/subs
-
-
+  /* works now
+    See --> https://github.com/ros-perception/image_common/issues/121 for imagetransport pub/subs
+  */
   camera_subscriber_ = image_transport::create_camera_subscription(
     this, "/image/front_img",
     std::bind(
@@ -31,8 +30,6 @@ void ArucoDetector::imageCallback(
   const sensor_msgs::msg::Image::ConstSharedPtr & image_msg,
   const sensor_msgs::msg::CameraInfo::ConstSharedPtr & info_msg)
 {
-  //delete this before PR
-  //RCLCPP_INFO(this->get_logger(), "Received the image!");
   cv::Ptr<cv::aruco::DetectorParameters> parameters = cv::aruco::DetectorParameters::create();
   cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(
     cv::aruco::DICT_4X4_50);
@@ -60,14 +57,13 @@ void ArucoDetector::imageCallback(
       corners, tagWidth / 100.0, camera_matrix, distCoeffs,
       rvecs, tvecs);
 
+
     /*
     The below code makes some assumptions:
        First, the only tags that should be published are the tags used at the URC
        Second, only at most one of each tag should be detected
        Finally, there will be no false positives for tags ids being used at the URC
      */
-
-
     for (int id = 0; id < static_cast<int>(MarkerIDs.size()); ++id) {
       //checks if this tag has already been seen in this image and that it is a valid URC tag
       if (MarkerIDs[id] > numTags - 1 || detectedTags[MarkerIDs[id]] == 1) {
@@ -102,10 +98,7 @@ void ArucoDetector::imageCallback(
 
       aruco_publisher->publish(aruco_message);
     }
-
   }
-
-
 }
 
 }
