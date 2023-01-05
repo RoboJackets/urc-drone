@@ -115,7 +115,7 @@ void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
 */
 void ArucoLocation::orientationCallback(const sensor_msgs::msg::Imu & imu_msg)
 {
-  //RCLCPP_INFO(this->get_logger(), "Received orientaion!");
+  RCLCPP_INFO(this->get_logger(), "Received orientaion!");
   roll = -1;
   pitch = -1;
   yaw = -1;
