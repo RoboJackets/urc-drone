@@ -15,7 +15,7 @@ find_package(OpenCV 4 REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(tf2 REQUIRED)
-find_package(tf2_geometry_msgs)
+find_package(tf2_geometry_msgs REQUIRED)
 
 include_directories(
   include
