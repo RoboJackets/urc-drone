@@ -98,7 +98,10 @@ void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
 }
 
 
-//Sources: http://wiki.ros.org/tf2/Tutorials/Quaternions   and https://answers.ros.org/question/339528/quaternion-to-rpy-ros2/
+/*
+  See http://wiki.ros.org/tf2/Tutorials/Quaternions and
+  https://answers.ros.org/question/339528/quaternion-to-rpy-ros2/
+*/
 void ArucoLocation::orientationCallback(const sensor_msgs::msg::Imu & imu_msg)
 {
   RCLCPP_INFO(this->get_logger(), "Received orientaion!");

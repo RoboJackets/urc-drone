@@ -34,23 +34,16 @@ private:
   //TODO likely need type changes (sensor documentation)
   //Variables given by Aruco Detector Node
   //gpsRead and orientationRead have the purpose of determining whether data has been received for those yet.
-  double xAngle;
-  double yAngle;
-  double zAngle;
+  double xAngle, yAngle, zAngle;
   double trueDist;
   double tagId;
   bool arucoRead = false;
 
-  double droneLat;
-  double droneLon;
-  double droneAlt;
+  double droneLat, droneLon, droneAlt;
   bool gpsRead = false;
 
-  double yaw;
-  double pitch;
-  double roll;
+  double yaw, pitch, roll;
   bool orientationRead = false;
-
 
   void arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_msg);
   void gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg);
