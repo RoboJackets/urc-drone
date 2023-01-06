@@ -13,7 +13,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <geometry_msgs/msg/quaternion.hpp>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 
 
 namespace aruco_location
@@ -36,7 +36,7 @@ private:
 
   //Variables given by Aruco Detector Node
   //gpsRead and orientationRead have the purpose of determining whether data has been received for those yet.
-  double xAngle, yAngle, zAngle;
+  double xAngle, yAngle;
   double trueDist;
   double tagId;
   bool arucoRead = false;

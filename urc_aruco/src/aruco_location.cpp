@@ -78,7 +78,6 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
   //RCLCPP_INFO(this->get_logger(), "Received aruco!");
   xAngle = aruco_msg.x_angle;
   yAngle = aruco_msg.y_angle;
-  zAngle = aruco_msg.z_angle;
   trueDist = aruco_msg.distance;
   tagId = aruco_msg.id;
 
@@ -124,7 +123,7 @@ void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
 */
 void ArucoLocation::orientationCallback(const sensor_msgs::msg::Imu & imu_msg)
 {
-  RCLCPP_INFO(this->get_logger(), "Received orientaion!");
+  //RCLCPP_INFO(this->get_logger(), "Received orientaion!");
   roll = -1;
   pitch = -1;
   yaw = -1;

@@ -89,14 +89,17 @@ void ArucoDetector::imageCallback(
 
       //width = corners[id][1].x - corners[id][0].x;
       //distance = tvecs[i][2];//(tagWidth * camera_matrix.at<uint8_t>(0, 0)) / width;      //TODO: Does this actually work??
-
+      
+      xAngle = atan(tvecs[i][0]/tvecs[i][2]);
+      yAngle = atan(tvecs[i][1]/tvecs[i][2]);
+      distance = sqrt(pow(tvecs[i][0],2)+pow(tvecs[i][1],2)+pow(tvecs[i][2],2));
+      
       urc_msgs::msg::ArucoDetection aruco_message;
       aruco_message.header.stamp = info_msg->header.stamp;
       //TODO: other header messages?
-      aruco_message.x_angle = rvecs[i][0];
-      aruco_message.y_angle = rvecs[i][1];
-      aruco_message.z_angle = rvecs[i][2];
-      aruco_message.distance = tvecs[i][2];
+      aruco_message.x_angle = xAngle;
+      aruco_message.y_angle = yAngle;
+      aruco_message.distance = distance;
       aruco_message.id = MarkerIDs[id];
 
       aruco_publisher->publish(aruco_message);

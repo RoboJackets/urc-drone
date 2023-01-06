@@ -32,8 +32,8 @@ private:
   int tagWidth;   //actual tag width in cm
   double width;   //pixel width
   int xCenter, yCenter;
-  double distance;   //Returned distance in cm
-  double xAngle, yAngle;   //Should be in degrees
+  double distance;   //Returned distance in m
+  double xAngle, yAngle;   //Should be in radians
 
   std::vector<cv::Vec3d> rvecs, tvecs;
 
