@@ -31,26 +31,29 @@ ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
     });
 }
 
+//TODO verify functionality of lat/lon calculations
+//All units need to be converted into radians
 
-//TODO rework methods using sensor messages documentation in km
-double ArucoLocation::getNextLatitude(double d, double xAngle, double yaw, double r)
+//Latitude and Longtitude calculations using Aviation Formulary V1.47:
+//http://www.edwilliams.org/avform147.htm#LL
+//
+
+double ArucoLocation::getNextLatitude(double d, double xAngle, double yaw)
 {
   if (!arucoRead || !gpsRead || !orientationRead) {
     return -1.0;
   }
-  return asin(sin(droneLat) * cos(d / r) + cos(droneLat) * sin(d / r) * cos(xAngle + yaw));
+  return asin(sin(droneLat) * cos(d) + cos(droneLat) * sin(d) * cos(xAngle + yaw));
+
 }
 
-//TODO diagnose
-double ArucoLocation::getNextLongitude(double d, double xAngle, double yaw, double r)   //wouldn't this be xAngle+yaw
+double ArucoLocation::getNextLongitude(double d, double xAngle, double yaw)
 {
   if (!arucoRead || !gpsRead || !orientationRead) {
     return -1.0;
   }
-  return droneLon + atan2(
-  sin(xAngle + yaw) * sin(d / r) * cos(droneLat), cos(d / r) - sin(
-      droneLat) * sin(getNextLatitude(d, xAngle, yaw, r))
-      );
+  double dlon = atan2(sin(xAngle+yaw) * sin(d) * cos(droneLat), cos(d) - sin(droneLat) * sin(getNextLatitude(d,xAngle,yaw)));
+  return std::fmod(((droneLon-dlon) + M_PI),2.0*M_PI) - M_PI;
 }
 
 double ArucoLocation::findD(double trueD, double yAngle, double pitch)
@@ -81,17 +84,23 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
 
 
   if (gpsRead && orientationRead) {
-    //TODO Implement main logic for calculating Tag location
     //std::cout << "droneLat: " << droneLat << std::endl;
     //std::cout << "Roll: " << roll << std::endl;
-    double d = findD(trueDist,yAngle,pitch); 
-    double r = 1; //???   
+    arucoRead = true;
+    double d = findD(trueDist,yAngle,pitch);
     urc_msgs::msg::ArucoLocation location_message;
     location_message.header.stamp = aruco_msg.header.stamp;
-    location_message.lon = getNextLongitude(d,xAngle,yaw,r);
-    location_message.lat = getNextLatitude(d,xAngle,yaw,r);
+    location_message.lon = getNextLongitude(d,xAngle,yaw);
+    location_message.lat = getNextLatitude(d,xAngle,yaw);
     location_message.id = aruco_msg.id;
     location_publisher->publish(location_message);
+  } else {
+    RCLCPP_INFO(this->get_logger(), "GPS or Orientation read unsuccessful. Printing Data...");
+    std::cout << "Drone Latitude: " << droneLat << std::endl;
+    std::cout << "Drone Longitude: " << droneLon << std::endl;
+    std::cout << "Drone Roll: " << roll << std::endl;
+    std::cout << "Drone Pitch: " << pitch << std::endl;
+    std::cout << "Drone Yaw: " << yaw << std::endl;
   }
 
   orientationRead = false;

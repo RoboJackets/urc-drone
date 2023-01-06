@@ -24,8 +24,8 @@ public:
   explicit ArucoLocation(const rclcpp::NodeOptions & options);
 
 private:
-  double getNextLatitude(double d, double xAngle, double yaw, double r);
-  double getNextLongitude(double d, double xAngle, double yaw, double r);
+  double getNextLatitude(double d, double xAngle, double yaw);
+  double getNextLongitude(double d, double xAngle, double yaw);
   double findD(double trueD, double yAngle, double pitch);
 
   rclcpp::Publisher<urc_msgs::msg::ArucoLocation>::SharedPtr location_publisher;
