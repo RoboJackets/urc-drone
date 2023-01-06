@@ -14,6 +14,8 @@ find_package(diagnostic_updater REQUIRED)
 find_package(OpenCV 4 REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 include_directories(
   include
@@ -35,6 +37,8 @@ set(dependencies
   cv_bridge
   image_transport
   OpenCV
+  tf2
+  tf2_geometry_msgs
 )
 
 ament_target_dependencies(${PROJECT_NAME}
