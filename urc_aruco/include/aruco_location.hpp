@@ -34,8 +34,6 @@ private:
   rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr gps_subscriber;
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr orientation_subscriber;
 
-
-  //TODO likely need type changes (sensor documentation)
   //Variables given by Aruco Detector Node
   //gpsRead and orientationRead have the purpose of determining whether data has been received for those yet.
   double xAngle, yAngle, zAngle;
