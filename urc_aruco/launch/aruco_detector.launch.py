@@ -18,7 +18,7 @@ def generate_launch_description():
                 ("/aruco_detector/aruco", "/aruco")
             ]
         )
-        
+
     aruco_location_node = Node(
             package='urc_aruco',
             executable='urc_aruco_ArucoLocation',
@@ -28,7 +28,7 @@ def generate_launch_description():
             #                         'aruco_location_params.yaml'])
             # ]
             )
-        
+
       
 
     return LaunchDescription([
