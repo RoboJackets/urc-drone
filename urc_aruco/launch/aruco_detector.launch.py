@@ -29,8 +29,6 @@ def generate_launch_description():
             # ]
             )
 
-      
-
     return LaunchDescription([
         aruco_detector_node,
         aruco_location_node
