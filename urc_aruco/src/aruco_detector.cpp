@@ -13,7 +13,7 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options)
     rclcpp::SystemDefaultsQoS()
   );
 
-  /* works now
+  /*
     See --> https://github.com/ros-perception/image_common/issues/121 for imagetransport pub/subs
   */
   camera_subscriber_ = image_transport::create_camera_subscription(
@@ -34,7 +34,7 @@ void ArucoDetector::imageCallback(
   cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(
     cv::aruco::DICT_4X4_50);
 
-  //get image in gray scale?
+  //Get image in gray scale
   const auto cv_image = cv_bridge::toCvCopy(image_msg, "bgr8");
   cv::cvtColor(cv_image->image, cv_image->image, cv::COLOR_BGR2GRAY);
 
@@ -78,25 +78,16 @@ void ArucoDetector::imageCallback(
       std::cout << "Y-Angle: " << rvecs[i][1] << std::endl;
       std::cout << "Z-Angle: " << rvecs[i][2] << std::endl;
       */
-
-      //xCenter = (corners[id][1].x + corners[id][0].x) / 2;
-      //xAngle = dppx * (xCenter - cv_image->image.cols / 2);
-      //xAngle = rvecs[i][0];
-
-      //yCenter = (corners[id][2].y + corners[id][3].y) / 2;
-      //yAngle = dppy * (yCenter - cv_image->image.rows / 2);
-      //yAngle = rvecs[i][1];
-
-      //width = corners[id][1].x - corners[id][0].x;
-      //distance = tvecs[i][2];//(tagWidth * camera_matrix.at<uint8_t>(0, 0)) / width;      //TODO: Does this actually work??
       
+      //Tvecs is a translation vector of the marker relative to the camera in x,y,z
+      //Rvecs is a rodriguez rotation vector describing the marker orientation relative to the
+      //marker itself.
       xAngle = atan(tvecs[i][0]/tvecs[i][2]);
       yAngle = atan(tvecs[i][1]/tvecs[i][2]);
       distance = sqrt(pow(tvecs[i][0],2)+pow(tvecs[i][1],2)+pow(tvecs[i][2],2));
       
       urc_msgs::msg::ArucoDetection aruco_message;
       aruco_message.header.stamp = info_msg->header.stamp;
-      //TODO: other header messages?
       aruco_message.x_angle = xAngle;
       aruco_message.y_angle = yAngle;
       aruco_message.distance = distance;

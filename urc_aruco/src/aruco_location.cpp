@@ -31,9 +31,8 @@ ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
     });
 }
 
-//TODO verify functionality of lat/lon calculations
-//All units need to be converted into radians
 
+//All units need to be converted into radians
 //Latitude and Longtitude calculations using Aviation Formulary V1.47:
 //http://www.edwilliams.org/avform147.htm#LL
 //
@@ -83,8 +82,6 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
 
 
   if (gpsRead && orientationRead) {
-    //std::cout << "droneLat: " << droneLat << std::endl;
-    //std::cout << "Roll: " << roll << std::endl;
     arucoRead = true;
     double d = findD(trueDist,yAngle,pitch);
     urc_msgs::msg::ArucoLocation location_message;
