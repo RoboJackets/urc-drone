@@ -5,7 +5,6 @@ namespace aruco_location
 ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
 : rclcpp::Node("aruco_location", options)
 {
-  //Publisher
   location_publisher = create_publisher<urc_msgs::msg::ArucoLocation>(
     "~/tag_location",
     rclcpp::SystemDefaultsQoS()
@@ -18,7 +17,6 @@ ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
       arucoCallback(aruco_msg);
     });
 
-  //GPS Location of Drone
   gps_subscriber = create_subscription<sensor_msgs::msg::NavSatFix>(
     "/gps/data", rclcpp::SensorDataQoS(), [this](const sensor_msgs::msg::NavSatFix gps_msg) {
       gpsCallback(gps_msg);
@@ -32,11 +30,11 @@ ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
 }
 
 
-//All units need to be converted into radians
-//Latitude and Longtitude calculations using Aviation Formulary V1.47:
-//http://www.edwilliams.org/avform147.htm#LL
-//
-
+/*
+All units need to be converted into radians
+Latitude and Longtitude calculations using Aviation Formulary V1.47:
+See --> http://www.edwilliams.org/avform147.htm#LL
+*/
 double ArucoLocation::getNextLatitude(double d, double xAngle, double yaw)
 {
   if (!arucoRead || !gpsRead || !orientationRead) {
@@ -71,7 +69,6 @@ sensor values will be recent enough to make a Lat/Lon calculation.
 
 If this becomes a problem, try using callback groups using single-threaded executors
 */
-
 void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_msg)
 {
   //RCLCPP_INFO(this->get_logger(), "Received aruco!");
@@ -80,36 +77,29 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
   trueDist = aruco_msg.distance;
   tagId = aruco_msg.id;
 
-
   if (gpsRead && orientationRead) {
     arucoRead = true;
     double d = findD(trueDist,yAngle,pitch);
+    
     urc_msgs::msg::ArucoLocation location_message;
     location_message.header.stamp = aruco_msg.header.stamp;
     location_message.lon = getNextLongitude(d,xAngle,yaw);
     location_message.lat = getNextLatitude(d,xAngle,yaw);
     location_message.id = aruco_msg.id;
+
     location_publisher->publish(location_message);
   } else {
-    RCLCPP_INFO(this->get_logger(), "GPS or Orientation read unsuccessful. Printing Data...");
-    std::cout << "Drone Latitude: " << droneLat << std::endl;
-    std::cout << "Drone Longitude: " << droneLon << std::endl;
-    std::cout << "Drone Roll: " << roll << std::endl;
-    std::cout << "Drone Pitch: " << pitch << std::endl;
-    std::cout << "Drone Yaw: " << yaw << std::endl;
+    RCLCPP_INFO(this->get_logger(), "GPS or Orientation read unsuccessful.");
   }
 
-  orientationRead = false;
-  arucoRead = false;
-  gpsRead = false;
+  orientationRead = false, arucoRead = false, gpsRead = false;
 }
 
 void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
 {
-  //RCLCPP_INFO(this->get_logger(), "Received GPS!");
-  droneLat = double(gps_msg.latitude);
-  droneLon = double(gps_msg.longitude);
-  droneAlt = double(gps_msg.altitude);
+  droneLat = static_cast<double>(gps_msg.latitude);
+  droneLon = static_cast<double>(gps_msg.longitude);
+  droneAlt = static_cast<double>(gps_msg.altitude);
   gpsRead = true;
 }
 
@@ -120,18 +110,15 @@ void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
 */
 void ArucoLocation::orientationCallback(const sensor_msgs::msg::Imu & imu_msg)
 {
-  //RCLCPP_INFO(this->get_logger(), "Received orientaion!");
-  roll = -1;
-  pitch = -1;
-  yaw = -1;
   geometry_msgs::msg::Quaternion rawOrientation = imu_msg.orientation;
   tf2::Quaternion convertedOrientation;
   tf2::fromMsg(rawOrientation, convertedOrientation);
   tf2::Matrix3x3 m(convertedOrientation);
   m.getRPY(roll, pitch, yaw);
-  roll = double(roll);
-  pitch = double(pitch);
-  yaw = double(yaw);
+
+  roll = static_cast<double>(roll);
+  pitch = static_cast<double>(pitch);
+  yaw = static_cast<double>(yaw);
   orientationRead = true;
 }
 

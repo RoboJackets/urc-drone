@@ -22,8 +22,6 @@ ArucoDetector::ArucoDetector(const rclcpp::NodeOptions & options)
       &ArucoDetector::imageCallback, this, std::placeholders::_1,
       std::placeholders::_2),
     "raw", rclcpp::SensorDataQoS().get_rmw_qos_profile());
-
-
 }
 
 void ArucoDetector::imageCallback(
@@ -60,9 +58,9 @@ void ArucoDetector::imageCallback(
 
     /*
     The below code makes some assumptions:
-       First, the only tags that should be published are the tags used at the URC
-       Second, only at most one of each tag should be detected
-       Finally, there will be no false positives for tags ids being used at the URC
+       1. The only tags that should be published are the tags used at the URC
+       2. Only at most one of each tag should be detected
+       3. There will be no false positives for tags ids being used at the URC
      */
     for (int id = 0; id < static_cast<int>(MarkerIDs.size()); ++id) {
       //checks if this tag has already been seen in this image and that it is a valid URC tag

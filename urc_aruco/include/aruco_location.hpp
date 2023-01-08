@@ -13,7 +13,7 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <geometry_msgs/msg/quaternion.hpp>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 
 namespace aruco_location
@@ -44,7 +44,7 @@ private:
   double droneLat, droneLon, droneAlt;
   bool gpsRead = false;
 
-  double yaw, pitch, roll;
+  double yaw = -1, pitch = -1, roll = -1;
   bool orientationRead = false;
 
   void arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_msg);
