@@ -18,12 +18,6 @@ jobs:
         with:
           submodules: recursive
           path: drone-colcon-workspace/src/urc-drone
-
-	name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
           
       - name: Build
         shell: bash
