@@ -37,7 +37,7 @@ See --> http://www.edwilliams.org/avform147.htm#LL
 */
 double ArucoLocation::getNextLatitude(double d, double xAngle, double yaw)
 {
-  if (!arucoRead || !gpsRead || !orientationRead) {
+  if (!gpsRead || !orientationRead) {
     return -1.0;
   }
   return asin(sin(droneLat) * cos(d) + cos(droneLat) * sin(d) * cos(xAngle + yaw));
@@ -46,7 +46,7 @@ double ArucoLocation::getNextLatitude(double d, double xAngle, double yaw)
 
 double ArucoLocation::getNextLongitude(double d, double xAngle, double yaw)
 {
-  if (!arucoRead || !gpsRead || !orientationRead) {
+  if (!gpsRead || !orientationRead) {
     return -1.0;
   }
   double dlon = atan2(sin(xAngle+yaw) * sin(d) * cos(droneLat), cos(d) - sin(droneLat) * sin(getNextLatitude(d,xAngle,yaw)));
@@ -55,7 +55,7 @@ double ArucoLocation::getNextLongitude(double d, double xAngle, double yaw)
 
 double ArucoLocation::findD(double trueD, double yAngle, double pitch)
 {
-  if (!arucoRead || !gpsRead || !orientationRead) {
+  if (!gpsRead || !orientationRead) {
     return -1.0;
   }
   return trueD * cos(pitch + yAngle);
@@ -78,9 +78,7 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
   tagId = aruco_msg.id;
 
   if (gpsRead && orientationRead) {
-    arucoRead = true;
-    double d = findD(trueDist,yAngle,pitch);
-    
+    double d = findD(trueDist,yAngle,pitch);  
     urc_msgs::msg::ArucoLocation location_message;
     location_message.header.stamp = aruco_msg.header.stamp;
     location_message.lon = getNextLongitude(d,xAngle,yaw);
@@ -92,7 +90,7 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
     RCLCPP_INFO(this->get_logger(), "GPS or Orientation read unsuccessful.");
   }
 
-  orientationRead = false, arucoRead = false, gpsRead = false;
+  orientationRead = false, gpsRead = false;
 }
 
 void ArucoLocation::gpsCallback(const sensor_msgs::msg::NavSatFix & gps_msg)
