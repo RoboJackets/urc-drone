@@ -69,21 +69,12 @@ void ArucoDetector::imageCallback(
       }
       detectedTags[MarkerIDs[id]] = 1;
 
-      //Uncomment to verify message publishing
-      /*
-      std::cout << "\n\n" << "Distance: " << tvecs[i][2] << std::endl;
-      std::cout << "X-Angle: " << rvecs[i][0] << std::endl;
-      std::cout << "Y-Angle: " << rvecs[i][1] << std::endl;
-      std::cout << "Z-Angle: " << rvecs[i][2] << std::endl;
-      */
-      
       //Tvecs is a translation vector of the marker relative to the camera in x,y,z
       //Rvecs is a rodriguez rotation vector describing the marker orientation relative to the
       //marker itself.
-      xAngle = atan(tvecs[i][0]/tvecs[i][2]);
-      yAngle = atan(tvecs[i][1]/tvecs[i][2]);
-      distance = sqrt(pow(tvecs[i][0],2)+pow(tvecs[i][1],2)+pow(tvecs[i][2],2));
-      
+      xAngle = atan(tvecs[i][0] / tvecs[i][2]);
+      yAngle = atan(tvecs[i][1] / tvecs[i][2]);
+      distance = sqrt(pow(tvecs[i][0], 2) + pow(tvecs[i][1], 2) + pow(tvecs[i][2], 2));
       urc_msgs::msg::ArucoDetection aruco_message;
       aruco_message.header.stamp = info_msg->header.stamp;
       aruco_message.x_angle = xAngle;

@@ -49,8 +49,11 @@ double ArucoLocation::getNextLongitude(double d, double xAngle, double yaw)
   if (!gpsRead || !orientationRead) {
     return -1.0;
   }
-  double dlon = atan2(sin(xAngle+yaw) * sin(d) * cos(droneLat), cos(d) - sin(droneLat) * sin(getNextLatitude(d,xAngle,yaw)));
-  return std::fmod(((droneLon-dlon) + M_PI),2.0*M_PI) - M_PI;
+  double dlon =
+    atan2(
+    sin(xAngle + yaw) * sin(d) * cos(droneLat),
+    cos(d) - sin(droneLat) * sin(getNextLatitude(d, xAngle, yaw)));
+  return std::fmod(((droneLon - dlon) + M_PI), 2.0 * M_PI) - M_PI;
 }
 
 double ArucoLocation::findD(double trueD, double yAngle, double pitch)
@@ -78,11 +81,11 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
   tagId = aruco_msg.id;
 
   if (gpsRead && orientationRead) {
-    double d = findD(trueDist,yAngle,pitch);  
+    double d = findD(trueDist, yAngle, pitch);
     urc_msgs::msg::ArucoLocation location_message;
     location_message.header.stamp = aruco_msg.header.stamp;
-    location_message.lon = getNextLongitude(d,xAngle,yaw);
-    location_message.lat = getNextLatitude(d,xAngle,yaw);
+    location_message.lon = getNextLongitude(d, xAngle, yaw);
+    location_message.lat = getNextLatitude(d, xAngle, yaw);
     location_message.id = aruco_msg.id;
 
     location_publisher->publish(location_message);
