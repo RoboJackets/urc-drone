@@ -1,0 +1,4 @@
+[submodule "external/px4_msgs"]
+	path = external/px4_msgs
+	url = https://github.com/PX4/px4_msgs
+	ignore = dirty

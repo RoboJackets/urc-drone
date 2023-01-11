@@ -14,6 +14,8 @@ find_package(diagnostic_updater REQUIRED)
 find_package(OpenCV 4 REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 include_directories(
   include
@@ -22,6 +24,7 @@ include_directories(
 # Library creation
 add_library(${PROJECT_NAME} SHARED
   src/aruco_detector.cpp
+  src/aruco_location.cpp
 )
 
 set(dependencies
@@ -34,6 +37,8 @@ set(dependencies
   cv_bridge
   image_transport
   OpenCV
+  tf2
+  tf2_geometry_msgs
 )
 
 ament_target_dependencies(${PROJECT_NAME}
@@ -45,6 +50,12 @@ rclcpp_components_register_node(
   ${PROJECT_NAME}
   PLUGIN "aruco_detector::ArucoDetector"
   EXECUTABLE ${PROJECT_NAME}_ArucoDetector
+)
+
+rclcpp_components_register_node(
+  ${PROJECT_NAME}
+  PLUGIN "aruco_location::ArucoLocation"
+  EXECUTABLE ${PROJECT_NAME}_ArucoLocation
 )
 
 # Install launch files.
