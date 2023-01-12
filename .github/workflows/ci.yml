@@ -24,7 +24,6 @@ jobs:
         run: |
           git submodule update --init --recursive 
           git submodule update --remote
-
       - name: Update Dependencies
         shell: bash
         run: |
@@ -32,15 +31,6 @@ jobs:
           sudo pip3 install kconfiglib
           sudo apt-get update
           sudo apt update
-
-<<<<<<< HEAD
-          sudo apt-get update && sudo apt-get -f install -yqq daemonize dbus-user-session fontconfig
-          sudo daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target
-          exec sudo nsenter --target $(pidof systemd) --a su - $LOGNAME
-          snap version
-
-          sudo snap install micro-ros-agent
-=======
           sudo apt-get install curl -y
           sudo apt-get install libgbm-dev -y
           sudo curl -sSL https://raw.githubusercontent.com/eProsima/vulcanexus/main/vulcanexus.key -o /usr/share/keyrings/vulcanexus-archive-keyring.gpg
@@ -48,8 +38,6 @@ jobs:
           sudo apt update -y
           sudo apt install -y vulcanexus-humble-desktop
           source /opt/vulcanexus/humble/setup.bash
->>>>>>> e9cb62fbfc226ecf07fb20cc613af902b6a8c7e1
-
       - name: Build
         shell: bash
         working-directory: drone-colcon-workspace
@@ -60,7 +48,6 @@ jobs:
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
           colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
-
   test:
     name: Test
     needs: build
@@ -81,7 +68,6 @@ jobs:
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y
           colcon build && colcon test && colcon test-result --verbose
-
   cpp_linting:
     name: C++ Linting
     runs-on: ubuntu-22.04
@@ -98,7 +84,6 @@ jobs:
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
           # ament_uncrustify -c ament_code_style.cfg
-
   python_linting:
     name: Python Linting
     runs-on: ubuntu-22.04
@@ -114,7 +99,6 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           sudo apt-get update
-
       - name: Run flake8
         shell: bash
         run: |
