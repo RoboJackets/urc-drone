@@ -32,7 +32,7 @@ jobs:
           sudo apt-get update
           sudo apt update
           sudo apt-get install curl -y
-          sudo apt-get install -f libgbm-dev -y
+          sudo apt-get install libgbm-dev libgbm1=22.0.1-1ubuntu2 --allow-downgrades -y
           sudo curl -sSL https://raw.githubusercontent.com/eProsima/vulcanexus/main/vulcanexus.key -o /usr/share/keyrings/vulcanexus-archive-keyring.gpg
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/vulcanexus-archive-keyring.gpg] http://repo.vulcanexus.org/debian $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/vulcanexus.list > /dev/null
           sudo apt update -y
