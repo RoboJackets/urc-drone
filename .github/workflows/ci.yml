@@ -33,12 +33,22 @@ jobs:
           sudo apt-get update
           sudo apt update
 
+<<<<<<< HEAD
           sudo apt-get update && sudo apt-get -f install -yqq daemonize dbus-user-session fontconfig
           sudo daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target
           exec sudo nsenter --target $(pidof systemd) --a su - $LOGNAME
           snap version
 
           sudo snap install micro-ros-agent
+=======
+          sudo apt-get install curl -y
+          sudo apt-get install libgbm-dev -y
+          sudo curl -sSL https://raw.githubusercontent.com/eProsima/vulcanexus/main/vulcanexus.key -o /usr/share/keyrings/vulcanexus-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/vulcanexus-archive-keyring.gpg] http://repo.vulcanexus.org/debian $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/vulcanexus.list > /dev/null
+          sudo apt update -y
+          sudo apt install -y vulcanexus-humble-desktop
+          source /opt/vulcanexus/humble/setup.bash
+>>>>>>> e9cb62fbfc226ecf07fb20cc613af902b6a8c7e1
 
       - name: Build
         shell: bash
