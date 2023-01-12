@@ -32,13 +32,8 @@ jobs:
           sudo pip3 install kconfiglib
           sudo apt-get update
           sudo apt update
-
-          sudo apt-get update && sudo apt-get install -yqq daemonize dbus-user-session fontconfig
-          sudo daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target
-          exec sudo nsenter --target $(pidof systemd) --all su - $LOGNAME
-          snap version
-
-          sudo snap install micro-ros-agent
+          sudo apt install -y vulcanexus-humble-desktop
+          source /opt/vulcanexus/humble/setup.bash
 
       - name: Build
         shell: bash
