@@ -16,6 +16,5 @@
 [submodule "external/micro_ros_setup"]
 	path = external/micro_ros_setup
 	url = https://github.com/micro-ROS/micro_ros_setup.git
-	branch = humble
 	ignore = dirty
 
