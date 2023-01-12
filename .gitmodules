@@ -12,3 +12,10 @@
 	path = external/PX4-Autopilot
 	url = https://github.com/PX4/PX4-Autopilot.git
 	ignore = dirty
+
+[submodule "external/micro_ros_setup"]
+	path = external/micro_ros_setup
+	url = https://github.com/micro-ROS/micro_ros_setup.git
+	branch = humble
+	ignore = dirty
+
