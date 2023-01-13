@@ -24,6 +24,7 @@ jobs:
         run: |
           git submodule update --init --recursive 
           git submodule update --remote
+
       - name: Update Dependencies
         shell: bash
         run: |
@@ -31,6 +32,7 @@ jobs:
           sudo pip3 install kconfiglib
           sudo apt-get update
           sudo apt update
+
       - name: Build
         shell: bash
         working-directory: drone-colcon-workspace
@@ -39,6 +41,7 @@ jobs:
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
           colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
+
   test:
     name: Test
     needs: build
@@ -51,14 +54,23 @@ jobs:
           submodules: recursive
           path: drone-colcon-workspace/src
 
+      - name: Update Dependencies
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          sudo pip3 install kconfiglib
+          sudo apt-get update
+          sudo apt update
+
       - name: Colcon Test
         shell: bash
         working-directory: drone-colcon-workspace
         run: |
           source /opt/ros/humble/setup.bash
           rosdep update
-          rosdep install --from-paths src --ignore-src -r -y
+          rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
           colcon build && colcon test && colcon test-result --verbose
+
   cpp_linting:
     name: C++ Linting
     runs-on: ubuntu-22.04
@@ -74,7 +86,8 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          # ament_uncrustify -c ament_code_style.cfg
+          ament_uncrustify -c ament_code_style.cfg
+
   python_linting:
     name: Python Linting
     runs-on: ubuntu-22.04
@@ -95,7 +108,7 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           ament_flake8 --exclude external
-  
+
   build_linting:
     name: Build Linting
     runs-on: ubuntu-22.04
@@ -111,4 +124,4 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          # ament_lint_cmake
+          ament_lint_cmake
