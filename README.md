@@ -8,7 +8,7 @@ Welcome to the RoboJackets URC software repo! This document will give you a brie
 
 ## Installation Instructions
 
-[Follow the URC software installation instructions here!](https://github.com/RoboJackets/urc-software)
+[Follow the URC software installation instructions here!](https://github.com/RoboJackets/urc-software#installation-instructions)
 
 [Follow the PX4 installation instructions here!](documents/ubuntu_px4_setup.md)
 

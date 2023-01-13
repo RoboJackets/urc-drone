@@ -86,7 +86,7 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          # ament_uncrustify -c ament_code_style.cfg
+          ament_uncrustify -c ament_code_style.cfg
 
   python_linting:
     name: Python Linting
@@ -119,4 +119,4 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          # ament_lint_cmake
+          ament_lint_cmake
