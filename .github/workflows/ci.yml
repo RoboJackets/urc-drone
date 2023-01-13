@@ -58,7 +58,7 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           sudo pip3 install kconfiglib
-          sudo apt-get install clang-tidy
+          sudo apt-get install clang-tidy -y
           sudo apt update
 
       - name: Colcon Test
