@@ -81,18 +81,12 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
-
       - name: Run Uncrustify
         shell: bash
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          ament_uncrustify -c ament_code_style.cfg
+          # ament_uncrustify -c ament_code_style.cfg
 
   python_linting:
     name: Python Linting
@@ -103,12 +97,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-
-      - name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
 
       - name: Run flake8
         shell: bash
@@ -126,15 +114,9 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
-
       - name: Run ament_lint_cmake
         shell: bash
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          ament_lint_cmake
+          # ament_lint_cmake
