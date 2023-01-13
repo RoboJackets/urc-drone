@@ -30,7 +30,6 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           sudo pip3 install kconfiglib
-          sudo apt-get update
           sudo apt update
 
       - name: Build
@@ -59,7 +58,7 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           sudo pip3 install kconfiglib
-          sudo apt-get update
+          sudo apt-get install clang-tidy
           sudo apt update
 
       - name: Colcon Test
@@ -69,7 +68,8 @@ jobs:
           source /opt/ros/humble/setup.bash
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
-          colcon build && colcon test && colcon test-result --verbose
+          colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
+          colcon test && colcon test-result --verbose
 
   cpp_linting:
     name: C++ Linting
