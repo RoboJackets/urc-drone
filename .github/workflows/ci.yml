@@ -31,6 +31,7 @@ jobs:
           source /opt/ros/humble/setup.bash
           sudo pip3 install kconfiglib
           sudo apt update
+          sudo apt upgrade
 
       - name: Build
         shell: bash
@@ -60,6 +61,7 @@ jobs:
           sudo pip3 install kconfiglib
           sudo apt-get install clang-tidy -y
           sudo apt update
+          sudo apt upgrade
 
       - name: Colcon Test
         shell: bash
