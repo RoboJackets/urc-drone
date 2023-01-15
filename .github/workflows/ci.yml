@@ -68,7 +68,7 @@ jobs:
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
           colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
-          colcon test && colcon test-result --verbose --packages-skip-regex (?i)(px4).*
+          colcon test --packages-skip-regex (?i)(px4).* && colcon test-result --verbose
 
   cpp_linting:
     name: C++ Linting
