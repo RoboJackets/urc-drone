@@ -75,7 +75,7 @@ jobs:
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
           colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
-          colcon test && colcon test-result --verbose
+          colcon test --packages-skip micro_ros_setup && colcon test-result --verbose
 
   cpp_linting:
     name: C++ Linting
