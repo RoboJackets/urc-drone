@@ -43,7 +43,7 @@ jobs:
 
   test:
     name: Test
-    # needs: build
+    needs: build
     runs-on: ubuntu-22.04
     container: robojackets/urc-baseimage:humble
     steps:
