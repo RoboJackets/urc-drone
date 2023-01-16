@@ -17,16 +17,29 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          path: drone-colcon-workspace/src/urc-drone
-          
+          path: drone-colcon-workspace/src
+
+      - name: Update submodules recursively
+        working-directory: drone-colcon-workspace/src
+        run: |
+          git submodule update --init --recursive 
+          git submodule update --remote
+
+      - name: Update Dependencies
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          sudo pip3 install kconfiglib
+          sudo apt update
+
       - name: Build
         shell: bash
         working-directory: drone-colcon-workspace
         run: |
           source /opt/ros/humble/setup.bash
           rosdep update
-          rosdep install --from-paths src --ignore-src -r -y
-          colcon build
+          rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
+          colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
 
   test:
     name: Test
@@ -38,7 +51,21 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
-          path: drone-colcon-workspace/src/urc-drone
+          path: drone-colcon-workspace/src
+          
+      - name: Update submodules recursively
+        working-directory: drone-colcon-workspace/src
+        run: |
+          git submodule update --init --recursive 
+          git submodule update --remote
+
+      - name: Update Dependencies
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          sudo pip3 install kconfiglib
+          sudo apt-get install clang-tidy -y
+          sudo apt update
 
       - name: Colcon Test
         shell: bash
@@ -46,8 +73,9 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           rosdep update
-          rosdep install --from-paths src --ignore-src -r -y
-          colcon build && colcon test && colcon test-result --verbose
+          rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
+          colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
+          colcon test --packages-skip micro_ros_setup && colcon test-result --verbose
 
   cpp_linting:
     name: C++ Linting
@@ -64,7 +92,7 @@ jobs:
         run: |
           source /opt/ros/humble/setup.bash
           touch external/AMENT_IGNORE
-          # ament_uncrustify -c ament_code_style.cfg
+          ament_uncrustify -c ament_code_style.cfg
 
   python_linting:
     name: Python Linting
@@ -76,18 +104,12 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Update Dependencies
-        shell: bash
-        run: |
-          source /opt/ros/humble/setup.bash
-          sudo apt-get update
-
       - name: Run flake8
         shell: bash
         run: |
           source /opt/ros/humble/setup.bash
           ament_flake8 --exclude external
-  
+
   build_linting:
     name: Build Linting
     runs-on: ubuntu-22.04

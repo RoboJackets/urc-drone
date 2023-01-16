@@ -1,4 +1,20 @@
+[submodule "external/px4_ros_com"]
+	path = external/px4_ros_com
+	url = https://github.com/PX4/px4_ros_com
+	ignore = dirty 
+
 [submodule "external/px4_msgs"]
 	path = external/px4_msgs
 	url = https://github.com/PX4/px4_msgs
 	ignore = dirty
+
+[submodule "external/PX4-Autopilot"]
+	path = external/PX4-Autopilot
+	url = https://github.com/PX4/PX4-Autopilot.git
+	ignore = dirty
+
+[submodule "external/micro_ros_setup"]
+	path = external/micro_ros_setup
+	url = https://github.com/micro-ROS/micro_ros_setup.git
+	ignore = dirty
+
