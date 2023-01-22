@@ -16,5 +16,5 @@ Welcome to the RoboJackets URC software repo! This document will give you a brie
 
 ## Contributing
 
-Join our slack [here!](https://robojackets.slack.com/)
+Join our slack [here!](https://robojackets.slack.com/) 
 
