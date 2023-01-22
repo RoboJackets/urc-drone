@@ -39,7 +39,7 @@ jobs:
           source /opt/ros/humble/setup.bash
           rosdep update
           rosdep install --from-paths src --ignore-src -r -y --skip-keys -v
-          colcon build --cmake-args -DCMAKE_BUILD_TYPE=RELWITHDEBINFO --symlink-install
+          colcon build --symlink-install
 
   test:
     name: Test
