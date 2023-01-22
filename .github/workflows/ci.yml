@@ -25,11 +25,6 @@ jobs:
           git submodule update --init --recursive 
           git submodule update --remote
 
-      - name: Revert to stable submodule
-        working-directory: drone-colcon-workspace/src/external/PX4-Autopilot
-        run: |
-          git checkout 6e30f8f5cb048c10eb803b58b1551534a469d898
-
       - name: Update Dependencies
         shell: bash
         run: |
