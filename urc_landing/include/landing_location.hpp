@@ -13,6 +13,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <bits/stdc++.h>
 #include <image_transport/image_transport.hpp>
+#include <cmath> //for power function
 
 namespace landing_location
 {
@@ -26,7 +27,7 @@ private:
   std::vector<urc_msgs::msg::LandingLocation> possibleLandingLocations;
   rclcpp::Publisher<urc_msgs::msg::LandingLocation>::SharedPtr landing_publisher; //message type placeholder
   rclcpp::Subscription<urc_msgs::msg::ArucoLocation>::SharedPtr aruco_locations_subscriber;
-  rclcpp::Subscription<std::vector<urc_msgs::msg::ArucoLocation>>::SharedPtr possible_locations_subscriber;
+  rclcpp::Subscription<std::vector<urc_msgs::msg::LandingLocation>>::SharedPtr possible_locations_subscriber;
   void aruco_locations_callback(const ArucoLocation location_msg);
   void landing_locations_callback(const std::vector<LandingLocation> location_array);
 };

@@ -27,11 +27,26 @@ LandingLocation::LandingLocation(const rclcpp::NodeOptions & options)
 }
 
 void LandingLocation::landingLocationsArrCallback(
-  const std::vector<urc_msgs::msg::LandingLocation> landingLocationArr)
+  const std::vector<urc_msgs::msg::LandingLocation> & landingLocationArr)
 {
   this.possibleLandingLocations = landingLocationArr;
 }
-void LandingLocation::arucoCallback()
+void LandingLocation::arucoCallback(
+  const urc_msgs::msg::ArucoLocation & arucoLocation)
+{
+  if (this.possibleLandingLocations != null) {
+    int closestLocationIndex = 0;
+    for(int i = 0; i < this.possibleLandingLocations.size() ; i++) {
+      if (
+        sqrt(this.possibleLandingLocations[i].lon, 2) + sqrt(this.possibleLandingLocations[i].lat, 2) < 
+        sqrt(this.possibleLandingLocations[closestLocationIndex].lon, 2) + sqrt(this.possibleLandingLocations[closestLocationIndex].lat, 2)
+        ) {
+          closestLocationIndex = i;
+        }
+    }
+    landing_publisher->publish(this.possibleLandingLocations[closestLocationIndex]);
+  }
+}
 
 }
 
