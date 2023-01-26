@@ -1,0 +1,2 @@
+std_msgs/Header header
+LandingLocation[100] landing_locations

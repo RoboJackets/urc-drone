@@ -51,12 +51,6 @@ rclcpp_components_register_node(
   EXECUTABLE ${PROJECT_NAME}_LandingLocation
 )
 
-rclcpp_components_register_node(
-  ${PROJECT_NAME}
-  PLUGIN "landing_location::LandingLocation"
-  EXECUTABLE ${PROJECT_NAME}_LandingLocation
-)
-
 # Install launch files.
 install(
   DIRECTORY

@@ -7,14 +7,10 @@ namespace landing_location
 LandingLocation::LandingLocation(const rclcpp::NodeOptions & options)
 : rclcpp::Node("landing_location", options)
 {
-  //instantiate attributes here
-  this.possibleLandingLocations = null;
-
-  landing_publisher = create_publisher<urc_msgs::msg::ArucoDetection>(
-    "~/aruco",
+  landing_publisher = create_publisher<urc_msgs::msg::PossibleLandingLocations>(
+    "~/landing_location",
     rclcpp::SystemDefaultsQoS()
   );
-
   aruco_locations_subscriber = create_subscription<urc_msgs::msg::ArucoLocation>(
     "~/tag_location", rclcpp::SensorDataQoS(), [this](const urc_msgs::msg::ArucoLocation aruco_location) {
       arucoCallback(arucoLocation);
@@ -27,25 +23,27 @@ LandingLocation::LandingLocation(const rclcpp::NodeOptions & options)
 }
 
 void LandingLocation::landingLocationsArrCallback(
-  const std::vector<urc_msgs::msg::LandingLocation> & landingLocationArr)
+  const urc_msgs::msg::PossibleLandingLocations & landingLocationsMsg)
 {
-  this.possibleLandingLocations = landingLocationArr;
+  this.possibleLandingLocations = landingLocationsMsg.landing_locations;
 }
 void LandingLocation::arucoCallback(
   const urc_msgs::msg::ArucoLocation & arucoLocation)
 {
-  if (this.possibleLandingLocations != null) {
-    int closestLocationIndex = 0;
-    for(int i = 0; i < this.possibleLandingLocations.size() ; i++) {
-      if (
-        sqrt(this.possibleLandingLocations[i].lon, 2) + sqrt(this.possibleLandingLocations[i].lat, 2) < 
-        sqrt(this.possibleLandingLocations[closestLocationIndex].lon, 2) + sqrt(this.possibleLandingLocations[closestLocationIndex].lat, 2)
-        ) {
-          closestLocationIndex = i;
-        }
-    }
-    landing_publisher->publish(this.possibleLandingLocations[closestLocationIndex]);
+  if (possibleLandingLocations == nullptr) {
+    RCLCPP_ERROR(this->get_logger(), "Landing locations should have been instantiated at this point!");
+    return;
   }
+
+  int closestLocationIndex = 0;
+  for (int i = 1; i < (sizeof(possibleLandingLocations) / sizeof(possibleLandingLocations[0])); ++i) {
+    if (sqrt(pow(this.possibleLandingLocations[i].lon, 2) + pow(this.possibleLandingLocations[i].lat, 2)) < 
+      sqrt(pow(this.possibleLandingLocations[closestLocationIndex].lon, 2) + pow(this.possibleLandingLocations[closestLocationIndex].lat, 2)))
+      {
+        closestLocationIndex = i;
+      }
+  }
+  landing_publisher->publish(this.possibleLandingLocations[closestLocationIndex]);
 }
 
 }

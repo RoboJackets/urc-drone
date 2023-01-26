@@ -6,30 +6,19 @@ from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
 
-    aruco_detector_node = Node(
-            package='urc_aruco',
-            executable='urc_aruco_ArucoDetector',
+    landing_location_node = Node(
+            package='urc_landing',
+            executable='urc_landing_LandingLocation',
             output='screen',
             parameters=[
-                PathJoinSubstitution([FindPackageShare('urc_aruco'), 'config',
-                                     'aruco_detector_params.yaml'])
+                PathJoinSubstitution([FindPackageShare('urc_landing'), 'config',
+                                     'landing_location_params.yaml'])
             ],
             remappings=[
-                ("/aruco_detector/aruco", "/aruco")
+                ("/landing_location/landing", "/landing")
             ]
         )
 
-    aruco_location_node = Node(
-            package='urc_aruco',
-            executable='urc_aruco_ArucoLocation',
-            output='screen',
-            # parameters=[
-            #    PathJoinSubstitution([FindPackageShare('urc_aruco'), 'config',
-            #                         'aruco_location_params.yaml'])
-            # ]
-            )
-
     return LaunchDescription([
-        aruco_detector_node,
-        aruco_location_node
+        landing_location_node,
     ])

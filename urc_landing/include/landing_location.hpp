@@ -24,7 +24,7 @@ public:
   explicit LandingLocation(const rclcpp::NodeOptions & options);
 
 private:
-  std::vector<urc_msgs::msg::LandingLocation> possibleLandingLocations;
+  urc_msgs::msg::PossibleLandingLocations possibleLandingLocations;
   rclcpp::Publisher<urc_msgs::msg::LandingLocation>::SharedPtr landing_publisher; //message type placeholder
   rclcpp::Subscription<urc_msgs::msg::ArucoLocation>::SharedPtr aruco_locations_subscriber;
   rclcpp::Subscription<std::vector<urc_msgs::msg::LandingLocation>>::SharedPtr possible_locations_subscriber;
