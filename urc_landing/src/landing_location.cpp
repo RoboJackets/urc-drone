@@ -7,7 +7,7 @@ namespace landing_location
 LandingLocation::LandingLocation(const rclcpp::NodeOptions & options)
 : rclcpp::Node("landing_location", options)
 {
-  landing_publisher = create_publisher<urc_msgs::msg::LandingLocation>(
+  landing_publisher = create_publisher<urc_msgs::msg::ChosenLandingLocation>(
   "~/landing_location",
     rclcpp::SystemDefaultsQoS()
   );
@@ -25,29 +25,35 @@ LandingLocation::LandingLocation(const rclcpp::NodeOptions & options)
 void LandingLocation::landingLocationsCallback(
   const urc_msgs::msg::PossibleLandingLocations & location_array_msg)
 {
-  possibleLandingLocations = location_array_msg.landing_locations;
+  int size = sizeof(possibleLandingLats)/sizeof(possibleLandingLats[0]);
+  for(int i = 0; i < size; i++) {
+    possibleLandingLats[i] = location_array_msg.possible_landing_lats[i];
+    possibleLandingLons[i] = location_array_msg.possible_landing_lons[i];
+  }
 }
 void LandingLocation::arucoCallback(
   const urc_msgs::msg::ArucoLocation & aruco_msg)
 {
-  if (possibleLandingLocations == nullptr) {
+  if (possibleLandingLats == nullptr) {
     RCLCPP_ERROR(this->get_logger(), "Landing locations should have been instantiated at this point!");
     return;
   }
-  std::vector<urc_msgs::msg::LandingLocation> vectorizedLandingLocations();
-  for (urc_msgs::msg::LandingLocation landingLocation: possibleLandingLocations) {
-    vectorizedLandingLocations.push_back(landingLocation);
-  }
   int closestLocationIndex = 0;
-  // const int numElements = (sizeof(possibleLandingLocations) / sizeof(possibleLandingLocations[0]));
-  for (int i = 1; i < vectorizedLandingLocations.size() ; ++i) {
-    if (sqrt(pow(abs(vectorizedLandingLocations[i].lon - aruco_msg.lon), 2) + pow(abs(vectorizedLandingLocations[i].lat - aruco_msg.lat), 2)) < 
-      sqrt(pow(abs(vectorizedLandingLocations[closestLocationIndex].lon - aruco_msg.lon), 2) + pow(abs(vectorizedLandingLocations[closestLocationIndex].lat - aruco_msg.lat), 2)))
+  arrayLength = (sizeof(possibleLandingLats) / sizeof(possibleLandingLats[0]));
+  for (int i = 1; i < arrayLength; ++i) {
+    if (sqrt(pow(abs(possibleLandingLats[i] - aruco_msg.lat), 2) + pow(abs(possibleLandingLats[i] - aruco_msg.lat), 2)) < 
+      sqrt(pow(abs(possibleLandingLons[closestLocationIndex] - aruco_msg.lon), 2) + pow(abs(possibleLandingLons[closestLocationIndex] - aruco_msg.lon), 2)))
       {
         closestLocationIndex = i;
       }
   }
-  landing_publisher->publish(possibleLandingLocations[closestLocationIndex]);
+
+
+    urc_msgs::msg::ChosenLandingLocation location_message;
+    location_message.header.stamp = aruco_msg.header.stamp;
+    location_message.lon = possibleLandingLons[closestLocationIndex];
+    location_message.lat = possibleLandingLats[closestLocationIndex];
+    landing_publisher->publish(location_message);
 }
 
 }
