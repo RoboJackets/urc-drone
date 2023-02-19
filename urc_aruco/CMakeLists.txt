@@ -25,6 +25,7 @@ include_directories(
 add_library(${PROJECT_NAME} SHARED
   src/aruco_detector.cpp
   src/aruco_location.cpp
+  src/aruco_backup.cpp
 )
 
 set(dependencies
@@ -56,6 +57,12 @@ rclcpp_components_register_node(
   ${PROJECT_NAME}
   PLUGIN "aruco_location::ArucoLocation"
   EXECUTABLE ${PROJECT_NAME}_ArucoLocation
+)
+
+rclcpp_components_register_node(
+  ${PROJECT_NAME}
+  PLUGIN "aruco_backup::ArucoBackup"
+  EXECUTABLE ${PROJECT_NAME}_ArucoBackup
 )
 
 # Install launch files.

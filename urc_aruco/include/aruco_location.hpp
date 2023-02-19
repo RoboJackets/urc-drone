@@ -5,7 +5,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
 #include <urc_msgs/msg/aruco_detection.hpp>
-#include <urc_msgs/msg/aruco_location.hpp>
+#include <urc_msgs/msg/gps_location.hpp>
 #include <sensor_msgs/msg/nav_sat_fix.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 #include <geometry_msgs/msg/quaternion.hpp>
@@ -29,7 +29,7 @@ private:
   double getNextLongitude(double d, double xAngle, double yaw);
   double findD(double trueD, double yAngle, double pitch);
 
-  rclcpp::Publisher<urc_msgs::msg::ArucoLocation>::SharedPtr location_publisher;
+  rclcpp::Publisher<urc_msgs::msg::GPSLocation>::SharedPtr location_publisher;
   rclcpp::Subscription<urc_msgs::msg::ArucoDetection>::SharedPtr aruco_subscriber;
   rclcpp::Subscription<sensor_msgs::msg::NavSatFix>::SharedPtr gps_subscriber;
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr orientation_subscriber;

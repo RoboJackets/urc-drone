@@ -2,10 +2,10 @@
 #define ARUCO_BACKUP_H
 
 #include <rclcpp/rclcpp.hpp>
-#include <sensor_msgs/msg/joy.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
-#include <diagnostic_updater/diagnostic_updater.hpp>
-#include <diagnostic_updater/publisher.hpp>
+#include <std_msgs/msg/bool.hpp>
+#include <urc_msgs/msg/gps_location.hpp>
+#include <urc_msgs/msg/gps_locations.hpp>
 
 namespace aruco_backup
 {
@@ -15,18 +15,18 @@ public:
   explicit ArucoBackup(const rclcpp::NodeOptions & options);
 
 private:
-  rclcpp::Publisher<urc_msgs::msg::ArucoLocation>::SharedPtr _cmd_publisher;
-  rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr _joy_subscriber;
+  rclcpp::Publisher<urc_msgs::msg::GPSLocations>::SharedPtr _waypoint_pub;
+  rclcpp::Subscription<urc_msgs::msg::GPSLocation>::SharedPtr _pose_sub;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr _center_reached_sub;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr _aruco_detected_sub;
 
-  std::unique_ptr<diagnostic_updater::Updater> updater_ptrt
-  double absoluteMaxVel, maxVel, maxVelIncr;
-  int leftJoyAxis, rightJoyAxis;
-  bool leftInverted, rightInverted;
+  int numPoints;
+  double uncertaintyRadius, cameraFOV, detectionRadius;
 
-  void joystick_diagnostic(diagnostic_updater::DiagnosticStatusWrapper & stat);
-  void joyCallback(const sensor_msgs::msg::Joy & msg);
+  void poseCallback(const urc_msgs::msg::GPSLocation & msg);
+  void centerReachedCallback(const std_msgs::msg::Bool & msg);
+  void arucoDetectedCallback(const std_msgs::msg::Bool & msg);
 };
 }
-
 
 #endif

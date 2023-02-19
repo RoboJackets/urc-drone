@@ -1,0 +1,10 @@
+aruco_backup:
+  ros__parameters:
+    # number of points on the path to sample
+    numPoints: 50
+    # search radius from given GPS location (meters)
+    uncertaintyRadius: 20
+    # camera FOV in radians (120 degrees -> 2.09 radians)
+    cameraFOV: 2.09
+    # how far camera can detect ARUCO tag (meters)
+    detectionRadius: 5
