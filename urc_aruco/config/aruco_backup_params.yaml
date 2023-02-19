@@ -4,7 +4,7 @@ aruco_backup:
     numPoints: 50
     # search radius from given GPS location (meters)
     uncertaintyRadius: 20
-    # camera FOV in radians (120 degrees -> 2.09 radians)
-    cameraFOV: 2.09
-    # how far camera can detect ARUCO tag (meters)
+    # camera FOV in degrees
+    cameraFOV: 120
+    # how far camera can detect ARUCO tag (meters), better to underestimate than overestimate
     detectionRadius: 5

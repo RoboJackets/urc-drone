@@ -1,6 +1,7 @@
 #ifndef ARUCO_BACKUP_H
 #define ARUCO_BACKUP_H
 
+#include <cmath>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
 #include <std_msgs/msg/bool.hpp>
@@ -15,16 +16,15 @@ public:
   explicit ArucoBackup(const rclcpp::NodeOptions & options);
 
 private:
-  rclcpp::Publisher<urc_msgs::msg::GPSLocations>::SharedPtr _waypoint_pub;
-  rclcpp::Subscription<urc_msgs::msg::GPSLocation>::SharedPtr _pose_sub;
-  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr _center_reached_sub;
+  rclcpp::Publisher<urc_msgs::msg::GPSLocation>::SharedPtr _waypoint_pub;
+  rclcpp::Subscription<urc_msgs::msg::GPSLocation>::SharedPtr _center_pose_sub;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr _aruco_detected_sub;
 
+  const int metersToDegrees = 111111;
   int numPoints;
-  double uncertaintyRadius, cameraFOV, detectionRadius;
+  double uncertaintyRadius, cameraFOV, detectionRadius, chordLength, spiralConstant;
 
-  void poseCallback(const urc_msgs::msg::GPSLocation & msg);
-  void centerReachedCallback(const std_msgs::msg::Bool & msg);
+  void centerPoseCallback(const urc_msgs::msg::GPSLocation & msg);
   void arucoDetectedCallback(const std_msgs::msg::Bool & msg);
 };
 }

@@ -6,44 +6,42 @@ namespace aruco_backup
 ArucoBackup::ArucoBackup(const rclcpp::NodeOptions & options)
 : rclcpp::Node("aruco_backup", options)
 {
-  _waypoint_pub = create_publisher<urc_msgs::msg::GPSLocations>(
+  _waypoint_pub = create_publisher<urc_msgs::msg::GPSLocation>(
     "~/backup_waypoints",
     rclcpp::SystemDefaultsQoS());
 
-  _pose_sub = create_subscription<urc_msgs::msg::GPSLocation>(
-    "~/gps_pose", rclcpp::SystemDefaultsQoS(), [this](const urc_msgs::msg::GPSLocation msg) {
-      poseCallback(msg);
-    });
-
-  _center_reached_sub = create_subscription<std_msgs::msg::Bool>(
-    "~/gps_pose", rclcpp::SystemDefaultsQoS(), [this](const std_msgs::msg::Bool msg) {
-      centerReachedCallback(msg);
+  _center_pose_sub = create_subscription<urc_msgs::msg::GPSLocation>(
+    "~/center_pose", rclcpp::SystemDefaultsQoS(), [this](const urc_msgs::msg::GPSLocation msg) {
+      centerPoseCallback(msg);
     });
 
   _aruco_detected_sub = create_subscription<std_msgs::msg::Bool>(
-    "~/gps_pose", rclcpp::SystemDefaultsQoS(), [this](const std_msgs::msg::Bool msg) {
+    "~/aruco_detected", rclcpp::SystemDefaultsQoS(), [this](const std_msgs::msg::Bool msg) {
       arucoDetectedCallback(msg);
     });
 
   numPoints = declare_parameter<int>("numPoints");
   uncertaintyRadius = declare_parameter<double>("uncertaintyRadius");
-  cameraFOV = declare_parameter<double>("cameraFOV");
+  cameraFOV = declare_parameter<double>("cameraFOV") * M_PI / 180;
   detectionRadius = declare_parameter<double>("detectionRadius");
+  chordLength = 2 * detectionRadius * std::sin(cameraFOV / 2);
+  spiralConstant = chordLength / (2 * M_PI);
 }
 
-void ArucoBackup::poseCallback(const urc_msgs::msg::GPSLocation & msg)
+void ArucoBackup::centerPoseCallback(const urc_msgs::msg::GPSLocation & msg)
 {
-  auto cmd = urc_msgs::msg::VelocityPair();
-  cmd.left_velocity = msg.axes[leftJoyAxis] * maxVel * (leftInverted ? -1.0 : 1.0);
-  cmd.right_velocity = msg.axes[rightJoyAxis] * maxVel * (rightInverted ? -1.0 : 1.0);
-  cmd.header.stamp = this->get_clock()->now();
+  auto goalPose = urc_msgs::msg::GPSLocation();
 
-  _waypoint_pub->publish(cmd);
-}
+  for (int i = 0; i < numPoints; ++i) {
+    double theta = (i / (numPoints - 1)) * (uncertaintyRadius + (chordLength / 2)) / spiralConstant;
+    double lat = (spiralConstant * theta * std::cos(theta) / metersToDegrees) + msg.lat;
+    double lon = (spiralConstant * theta * std::sin(theta) / metersToDegrees) + msg.lon;
 
-void ArucoBackup::centerReachedCallback(const std_msgs::msg::Bool & msg)
-{
-
+    goalPose.header.stamp = this->get_clock()->now();
+    goalPose.lat = lat;
+    goalPose.lon = lon;
+    _waypoint_pub->publish(goalPose);
+  }
 }
 
 void ArucoBackup::arucoDetectedCallback(const std_msgs::msg::Bool & msg)
