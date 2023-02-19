@@ -5,7 +5,7 @@ namespace aruco_location
 ArucoLocation::ArucoLocation(const rclcpp::NodeOptions & options)
 : rclcpp::Node("aruco_location", options)
 {
-  location_publisher = create_publisher<urc_msgs::msg::ArucoLocation>(
+  location_publisher = create_publisher<urc_msgs::msg::GPSLocation>(
     "~/tag_location",
     rclcpp::SystemDefaultsQoS()
   );
@@ -82,7 +82,7 @@ void ArucoLocation::arucoCallback(const urc_msgs::msg::ArucoDetection & aruco_ms
 
   if (gpsRead && orientationRead) {
     double d = findD(trueDist, yAngle, pitch);
-    urc_msgs::msg::ArucoLocation location_message;
+    urc_msgs::msg::GPSLocation location_message;
     location_message.header.stamp = aruco_msg.header.stamp;
     location_message.lon = getNextLongitude(d, xAngle, yaw);
     location_message.lat = getNextLatitude(d, xAngle, yaw);

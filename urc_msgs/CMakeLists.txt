@@ -13,7 +13,7 @@ find_package(geometry_msgs)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
     "msg/ArucoDetection.msg"
-    "msg/ArucoLocation.msg"
+    "msg/GPSLocation.msg"
 
     DEPENDENCIES
     std_msgs
