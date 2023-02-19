@@ -12,9 +12,9 @@ find_package(builtin_interfaces REQUIRED)
 find_package(geometry_msgs)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
+    "msg/ArucoDetected.msg"
     "msg/ArucoDetection.msg"
     "msg/GPSLocation.msg"
-    "msg/GPSLocations.msg"
 
     DEPENDENCIES
     std_msgs

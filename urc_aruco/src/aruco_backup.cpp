@@ -15,8 +15,8 @@ ArucoBackup::ArucoBackup(const rclcpp::NodeOptions & options)
       centerPoseCallback(msg);
     });
 
-  _aruco_detected_sub = create_subscription<std_msgs::msg::Bool>(
-    "~/aruco_detected", rclcpp::SystemDefaultsQoS(), [this](const std_msgs::msg::Bool msg) {
+  _aruco_detected_sub = create_subscription<urc_msgs::msg::ArucoDetected>(
+    "~/aruco_detected", rclcpp::SystemDefaultsQoS(), [this](const urc_msgs::msg::ArucoDetected msg) {
       arucoDetectedCallback(msg);
     });
 
@@ -44,7 +44,7 @@ void ArucoBackup::centerPoseCallback(const urc_msgs::msg::GPSLocation & msg)
   }
 }
 
-void ArucoBackup::arucoDetectedCallback(const std_msgs::msg::Bool & msg)
+void ArucoBackup::arucoDetectedCallback(const urc_msgs::msg::ArucoDetected & msg)
 {
 
 }

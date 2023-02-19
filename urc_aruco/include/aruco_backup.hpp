@@ -4,9 +4,8 @@
 #include <cmath>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
-#include <std_msgs/msg/bool.hpp>
+#include <urc_msgs/msg/aruco_detected.hpp>
 #include <urc_msgs/msg/gps_location.hpp>
-#include <urc_msgs/msg/gps_locations.hpp>
 
 namespace aruco_backup
 {
@@ -18,14 +17,14 @@ public:
 private:
   rclcpp::Publisher<urc_msgs::msg::GPSLocation>::SharedPtr _waypoint_pub;
   rclcpp::Subscription<urc_msgs::msg::GPSLocation>::SharedPtr _center_pose_sub;
-  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr _aruco_detected_sub;
+  rclcpp::Subscription<urc_msgs::msg::ArucoDetected>::SharedPtr _aruco_detected_sub;
 
   const int metersToDegrees = 111111;
   int numPoints;
   double uncertaintyRadius, cameraFOV, detectionRadius, chordLength, spiralConstant;
 
   void centerPoseCallback(const urc_msgs::msg::GPSLocation & msg);
-  void arucoDetectedCallback(const std_msgs::msg::Bool & msg);
+  void arucoDetectedCallback(const urc_msgs::msg::ArucoDetected & msg);
 };
 }
 
