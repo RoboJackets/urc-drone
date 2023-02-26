@@ -27,3 +27,6 @@ In `urc/drone-colon/src` run,
 ```bash
 bash external/PX4-Autopilot/Tools/setup/ubuntu.sh
 ```
+
+To run:
+[Follow the PX4 run instructions here!](documents/run_px4_instructions.md)
