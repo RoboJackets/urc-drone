@@ -11,6 +11,18 @@ In `urc/drone-colon/src` run,
 ```bash
 git submodule sync && git submodule update --init --recursive
 ```
+In `urc/drone-colon/src/external/micro-xrce-agent` run,
+
+```bash
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+sudo ldconfig /usr/local/lib/
+```
+
+In `urc/drone-colon/src` run,
 
 ```bash
 bash external/PX4-Autopilot/Tools/setup/ubuntu.sh
@@ -21,22 +33,8 @@ bash external/PX4-Autopilot/Tools/setup/ubuntu.sh
 In `urc/drone-colon/src/external/PX4-Autopilot`, run
 
 ```bash
-make px4_sitl gazebo
+MicroXRCEAgent udp4 -p 8888
 ```
-
-On a second terminal, run
-
-```bash
-micro-ros-agent udp4 --port 8888
-```
-
-Now back in the first terminal, run
-
-```bash
-microdds_client status
-```
-
-You should see the following line: `INFO  [microdds_client] Running, connected`
 
 In a **third** terminal, navigate to `urc/drone-colcon`. Run the following.
 
