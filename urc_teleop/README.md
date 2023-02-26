@@ -14,16 +14,3 @@ Launch the ROS2 WebSocket with `ros2 launch urc_teleop websocket.launch.py`
 3. Select open connection
 
 4. Choose *Rosbridge (ROS 1 & 2)* and enter in the WebSocket URL
-
-
-## Remote Operation
-
-1. Launch the ROS2 WebSocket
-
-2. `cd src/urc_software/urc_teleop/gui`
-
-3. Start a http server with `python3 -m http.server`
-
-4. Navigate to `http://127.0.0.1:8000` in a browser
-
-5. Connect the controller first, then the joystick
