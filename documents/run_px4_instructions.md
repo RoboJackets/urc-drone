@@ -1,5 +1,6 @@
+# Running PX4
 
-## 2. Run Simulation Environment
+## Run Simulation Environment
 
 In `urc/drone-colon/src/external/PX4-Autopilot`, run
 
