@@ -9,8 +9,8 @@ Welcome to the RoboJackets URC software repo! This document will give you a brie
 ## Installation Instructions
 1. Make sure you have followed the instructions in urc-rover for installing Ubuntu, ROS2 and the urc-rover and urc-drone repositories if you haven't already.  
 [Ubuntu, ROS2, and Repository Installation Instructions](https://github.com/RoboJackets/urc-software#installation-instructions)
-2. Set up PX4, an autopilot system bridged with ROS2 for determining drone logic.  
-[Follow the PX4 installation instructions here!](documents/ubuntu_px4_setup.md)
+2. Set up PX4, an autopilot system bridged with ROS2 for determining drone logic. This is only required for the drone repository.  
+[PX4 Installation Instructions](documents/ubuntu_px4_setup.md)
 
 ---
 
