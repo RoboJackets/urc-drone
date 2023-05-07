@@ -8,13 +8,13 @@ In `urc/drone-colon/src/external/PX4-Autopilot`, run
 make px4_sitl gazebo
 ```
 
-In `urc/drone-colon/src/external/micro-xrce-agent`, run
+In a **second** terminal, navigate to `urc/drone-colon/src/external/micro-xrce-agent` and run
 
 ```bash
 MicroXRCEAgent udp4 -p 8888
 ```
 
-In a **third** terminal, navigate to `urc/drone-colcon`. Run the following.
+In a **third** terminal, navigate to `urc/drone-colcon` and run
 
 ```bash
 . install/setup.bash
