@@ -6,6 +6,19 @@ Welcome to the RoboJackets URC software repo! This document will give you a brie
 
 ---
 
+## Directory Structure
+
+.github CI pipeline and PR/issue templates
+cmake CMake files to aid with building
+documents Research, design, and documentation
+external Where all our submodules are located
+urc_aruco Nodes used for detecting ArUco tags
+urc_gazebo Helper nodes used for simulation purposes
+urc_msgs Custom ROS messages used in various packages
+urc_teleop Rosbridge nodes and web interface for teleoperation
+
+---
+
 ## Installation Instructions
 1. Make sure you have followed the instructions in urc-rover for installing Ubuntu, ROS2 and the urc-rover and urc-drone repositories if you haven't already.  
 [Ubuntu, ROS2, and Repository Installation Instructions](https://github.com/RoboJackets/urc-software#installation-instructions)
