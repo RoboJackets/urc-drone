@@ -8,14 +8,23 @@ Welcome to the RoboJackets URC software repo! This document will give you a brie
 
 ## Directory Structure
 
-.github CI pipeline and PR/issue templates
-cmake CMake files to aid with building
-documents Research, design, and documentation
-external Where all our submodules are located
-urc_aruco Nodes used for detecting ArUco tags
-urc_gazebo Helper nodes used for simulation purposes
-urc_msgs Custom ROS messages used in various packages
-urc_teleop Rosbridge nodes and web interface for teleoperation
+ * **.github**
+    *CI pipeline and PR/issue templates*
+ * **cmake**
+    *CMake files to aid with building*
+ * **documents**
+    *Research, design, and documentation*
+ * **external**
+    *Where all our submodules are located*
+ * **urc_aruco**
+    *Nodes used for detecting ArUco tags*
+ * **urc_gazebo**
+    *Helper nodes used for simulation purposes*
+ * **urc_msgs**
+    *Custom ROS messages used in various packages*
+ * **urc_teleop**
+    *Rosbridge nodes and web interface for teleoperation*
+
 
 ---
 
